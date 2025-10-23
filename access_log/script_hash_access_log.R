@@ -26,7 +26,10 @@ library(digest)
 library(dplyr)
 
 get_salt = function () {
-    salt <- paste0(sample(c(letters, LETTERS, 0:9, "!@#$%^&*"), 32, replace = TRUE), collapse = "")
+    salt <- paste0(sample(c(letters, LETTERS, 0:9,
+                            "!", "@", "#", "$",
+                            "%", "^", "&", "*"), 32,
+                          replace=TRUE), collapse = "")
     return (salt)
 }
 
