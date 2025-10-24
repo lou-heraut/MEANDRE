@@ -326,8 +326,10 @@ h3 {
 
 #container-map {
     position: relative;
-    width: calc(100vh - 50px);
-    height: calc(100vh - 50px);
+    /* width: calc(100vh - 50px); */
+    /* height: calc(100vh - 50px); */
+    width: calc(100vh - 3rem);
+    height: calc(100vh - 3rem);
     overflow: hidden;
     display: flex;
 }
