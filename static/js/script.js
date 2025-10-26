@@ -386,6 +386,7 @@ function update_data_point() {
         svgFrance_VCN10 = update_map("#svg-france-VCN10", svgFrance_VCN10, null);
         $('#map-VCN10-loading').css('display', 'none');
     }
+    
 }
 
 function selectTraccButton(selectedButton) {
@@ -2311,6 +2312,7 @@ async function exportDataToCSV() {
             mergedData.set(item.code, { code: item.code });
         }
         mergedData.get(item.code).value_QA = item.value;
+        mergedData.get(item.code).fill_QA = item.fill;
     });
 
     // Ajouter les données QJXA
@@ -2319,6 +2321,7 @@ async function exportDataToCSV() {
             mergedData.set(item.code, { code: item.code });
         }
         mergedData.get(item.code).value_QJXA = item.value;
+        mergedData.get(item.code).fill_QJXA = item.fill;
     });
 
     // Ajouter les données VCN10
@@ -2327,14 +2330,22 @@ async function exportDataToCSV() {
             mergedData.set(item.code, { code: item.code });
         }
         mergedData.get(item.code).value_VCN10 = item.value;
+        mergedData.get(item.code).fill_VCN10 = item.fill;
     });
 
     // Convertir en tableau et créer le CSV
     const rows = Array.from(mergedData.values());
     
     // En-têtes
-    const headers = ['code', 'value_QA', 'value_QJXA', 'value_VCN10'];
+    const headers = ['code', 'value_QA', 'fill_QA', 'value_QJXA', 'fill_QJXA', 'value_VCN10', 'fill_VCN10'];
     let csv = headers.join(',') + '\n';
+
+    // data.data.forEach(item => {
+	// csvData_data.push({
+    //         code: item.code,
+    //         [variable]: item.value,
+    //         fill: item.fill
+	// });
 
     // Ajouter les lignes (gérer les virgules dans les valeurs)
     rows.forEach(row => {
