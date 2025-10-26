@@ -350,8 +350,8 @@ h3 {
 
 
 .container-gallery {
-    /* height: calc(100vh - 3rem - 1rem); */
-    height: calc(100vh - 3rem);
+    height: calc(100vh - 3rem - 1rem);
+    /* height: calc(100vh - 3rem); */
     flex: 1;
     overflow-y: auto;
     /* margin-top: 1rem; */
