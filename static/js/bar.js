@@ -21,6 +21,45 @@
 // If not, see <https://www.gnu.org/licenses/>.
 
 
+// function toggle_subtab(tab_button) {
+
+//     var tab = tab_button.parentNode;
+    
+//     var subbars = $('.subbar');
+//     subbars.each(function() {
+// 	var subbar = $(this);
+// 	var subtabs = $("[id^='" + subbar.attr("id") + "'][class^='subbar-tab']");
+	
+// 	if (subbar.hasClass("expanded")) {
+// 	    subtabs.each(function() {
+// 		$(this).removeClass("expanded");
+// 	    });
+// 	    setTimeout(() => {
+// 		subbar.removeClass("expanded");
+// 		subtabs.each(function() {
+// 		    $(this).css("display", "none");
+// 		});
+// 	    }, 300);
+	    
+// 	} else if (subbar.attr("id").startsWith(tab.id)) {
+// 	    subbar.addClass("expanded");
+// 	    subtabs.each(function() {
+// 		$(this).css("display", "flex");
+// 	    });
+// 	    setTimeout(() => {
+// 		subtabs.each(function() {
+// 		    $(this).addClass("expanded");
+// 		});
+// 	    }, 300);
+// 	}
+//     });
+
+//     setTimeout(() => {
+// 	check_bar();
+//     }, 300);
+// }
+
+
 function toggle_subtab(tab_button) {
 
     var tab = tab_button.parentNode;
