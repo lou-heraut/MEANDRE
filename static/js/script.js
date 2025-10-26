@@ -2301,6 +2301,127 @@ function wrapTextByCharacterLimit(text, maxChars) {
 }
 
 
+async function get_files () {
+    // data meta_point
+    const csvData_data = [];
+    const csvData_meta_point = [];
+
+    data_point_QA.data.forEach(item => {
+	csvData_data.push({
+            code: item.code,
+            fill: item.fill
+	});
+
+	const { fill, fill_text, value, ...otherFields } = item;
+	csvData_meta_point.push(otherFields);
+    });
+    let fieldOrder
+    
+    fieldOrder = [
+	"code",
+	"code_hydro2",
+	"is_reference",
+	"name",
+	"hydrological_region",
+	"lat_deg",
+	"lon_deg",
+	"xl93_m",
+	"yl93_m",
+	"n_rcp26",
+	"n_rcp45",
+	"n_rcp85",
+	"surface_km2",
+	"surface_ctrip_km2",
+	"surface_eros_km2",
+	"surface_grsd_km2",
+	"surface_j2000_km2",	    
+	"surface_mordor_sd_km2",
+	"surface_mordor_ts_km2",
+	"surface_orchidee_km2",
+	"surface_sim2_km2",
+	"surface_smash_km2"
+    ];
+    const csv_meta_point = Papa.unparse(csvData_meta_point, {
+        columns: fieldOrder
+    });
+
+    // meta_variable
+    const csvData_meta_variable = [];
+    // Fonction pour extraire les métadonnées d'une source
+    function extractMetadata(dataSource) {
+        const row = {};
+        Object.entries(dataSource).forEach(([key, value]) => {
+            if (key === 'data') {
+            return;
+            }
+            if (Array.isArray(value)) {
+            row[key] = value.join(", ");
+            } else {
+            row[key] = value;
+            }
+        });
+        return row;
+    }
+
+    // Récupérer les métadonnées pour les 3 sources
+    csvData_meta_variable.push(extractMetadata(data_point_QA));
+    csvData_meta_variable.push(extractMetadata(data_point_QJXA));
+    csvData_meta_variable.push(extractMetadata(data_point_VCN10));
+
+    fieldOrder = [
+    "variable_en",
+    "unit_en",
+    "name_en",
+    "description_en",
+    "method_en",
+    "sampling_period_en",
+    "topic_en",
+    "variable_fr",
+    "unit_fr",
+    "name_fr",
+    "description_fr",
+    "method_fr",
+    "sampling_period_fr",
+    "topic_fr",
+    "is_date",
+    "to_normalise",
+    "palette",
+    "bin"
+    ];
+
+    const csv_meta_variable = Papa.unparse(csvData_meta_variable, {
+    columns: fieldOrder
+    });
+
+    // meta projection
+    const csvData_meta_projection = [];
+    const row = {
+	    chain: selected_storyline.chain,
+	    RCP: "historical-rcp"+RCP_value ,
+	    GCM: selected_storyline.gcm,
+	    RCM: selected_storyline.rcm,
+	    BC: selected_storyline.bc,
+	    HM: selected_storyline.hm,
+	    storyline_name: selected_storyline.narratif_id,
+	    storyline_info: selected_storyline.narratif_description,
+	    storyline_color: selected_storyline.narratif_couleur
+        };
+    csvData_meta_projection.push(row);
+    const csv_meta_projection = Papa.unparse(csvData_meta_projection, {
+        columns: ["chain", "RCP", "GCM", "RCM", "BC", "HM",
+		  "storyline_name", "storyline_info", "storyline_color"]
+    });
+
+
+    const files = {
+	"meta_point.csv": csv_meta_point,
+    "meta_variable.csv": csv_meta_variable,
+    "meta_projection.csv": csv_meta_projection
+    };
+
+    return files;
+}
+
 async function exportDataToCSV() {
 
     // Créer un Map avec les codes comme clé pour fusionner les données
@@ -2363,16 +2484,32 @@ async function exportDataToCSV() {
     return csv
 }
 
+function getFormattedDateTime() {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const hours = String(currentDate.getHours()).padStart(2, '0');
+    const minutes = String(currentDate.getMinutes()).padStart(2, '0');
+    const seconds = String(currentDate.getSeconds()).padStart(2, '0');
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
 async function exportData() {
     const extended_name = selected_storyline.gwl+"+n-4+region-"+selected_storyline.region_id+"+"+selected_storyline.narratif_id
     let zip;  
     zip = new JSZip();
+    
     // data
     csv = exportDataToCSV();
     zip.file("data_"+extended_name+".csv", csv)
 
-    // const folder = zip.folder("folder")
-    // folder.file("other-csv.csv", csv)
+    // meta
+    files = await get_files();
+    Object.entries(files).forEach(([key, data_csv]) => {
+        // Ajouter chaque fichier CSV au zip
+        zip.file(key, data_csv);
+    });
 
     // figures
     const Height = 2000;
@@ -2387,9 +2524,33 @@ async function exportData() {
     const pdf_LO_fr = await pdfResponse_LO_fr.blob();
     // licence en
     const pdfResponse_LO_en = await fetch('/resources/licence_ouverte/ETALAB-Open-Licence-v2.0.pdf');
-    const pdf_LO_en = await pdfResponse_LO_en.blo
+    const pdf_LO_en = await pdfResponse_LO_en.blob();
     zip.file("ETALAB-Licence-Ouverte-v2.0.pdf", pdf_LO_fr);
     zip.file("ETALAB-Open-Licence-v2.0.pdf", pdf_LO_en);
+
+    // README
+    let README = await fetch('/resources/README.txt');
+    README = await README.text();
+    var time = getFormattedDateTime();
+    var horizon = get_horizon();
+    var n = get_n()
+    var subtitle = "Changements relatifs " + horizon.text + " par rapport à la période de référence 1991-2020";
+    let param =
+        "Titre : " + subtitle + "\n" +
+        // "Sous-titre : " + subtitle + "\n\n" +
+        "Variable : QA, QJXA et VCN10_summer \n" +
+        "Unité : %\n" +
+        "Horizon : " + horizon.H + "\n" +
+        "Nombre de point : Il y a au moins " + n + " modèles hydrologiques par point\n" +
+        "Scénario d'émission : rcp" + RCP_value + "\n" +
+        "Narratif : " + selected_storyline.narratif_id + "\n" +
+        "Description : " + selected_storyline.narratif + "\n" +
+        "Chaîne de modélisation : " + selected_storyline.chain + "\n\n";
+
+        README_tmp = README
+            .replace(/\[DATE\]/g, time)
+            .replace(/\[PARAM\]/g, param);
+        zip.file("README.txt", README_tmp);
 
     zip.generateAsync({ type: "blob" })
         .then(function (content) {
