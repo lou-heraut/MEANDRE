@@ -355,6 +355,7 @@ h3 {
     flex: 1;
     overflow-y: auto;
     /* margin-top: 1rem; */
+    padding-top: 1rem;
     padding-left: 1rem;
     padding-right: 1rem;
 }
