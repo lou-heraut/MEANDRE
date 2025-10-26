@@ -44,38 +44,38 @@ function selectButton(selectedButton) {
 }
 
 
-function load_slider() {
-    var slider = document.getElementById('slider-n');
+// function load_slider() {
+//     var slider = document.getElementById('slider-n');
     
-    noUiSlider.create(slider, {
-	start: [default_n],
-	behaviour: 'drag-smooth-steps-tap',
-	step: 1,
-	connect: true,
-	keyboardDefaultStep: 1,
-	keyboardPageMultiplier: 2,
-	keyboardMultiplier: 1,
-	range: {
-	    'min': 1,
-	    'max': 9
-	},
-	pips: {
-	    mode: 'values',
-	    values: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-	    density: 100,
-	}
-    });
+//     noUiSlider.create(slider, {
+// 	start: [default_n],
+// 	behaviour: 'drag-smooth-steps-tap',
+// 	step: 1,
+// 	connect: true,
+// 	keyboardDefaultStep: 1,
+// 	keyboardPageMultiplier: 2,
+// 	keyboardMultiplier: 1,
+// 	range: {
+// 	    'min': 1,
+// 	    'max': 9
+// 	},
+// 	pips: {
+// 	    mode: 'values',
+// 	    values: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+// 	    density: 100,
+// 	}
+//     });
 
-    var startValue = slider.noUiSlider.get();
-    var maxPos = Math.max(startValue) - 1;
-    $(slider).find('.noUi-value:visible').removeClass('highlight').eq(maxPos).addClass('highlight');
+//     var startValue = slider.noUiSlider.get();
+//     var maxPos = Math.max(startValue) - 1;
+//     $(slider).find('.noUi-value:visible').removeClass('highlight').eq(maxPos).addClass('highlight');
     
-    slider.noUiSlider.on('change', function(values) {
-    	var maxPos = Math.max(values) -1;
-        $(slider).find('.noUi-value:visible').removeClass('highlight').eq(maxPos).addClass('highlight');
-	update_data_point_debounce();
-    });
-}
+//     slider.noUiSlider.on('change', function(values) {
+//     	var maxPos = Math.max(values) -1;
+//         $(slider).find('.noUi-value:visible').removeClass('highlight').eq(maxPos).addClass('highlight');
+// 	update_data_point_debounce();
+//     });
+// }
 
 
 // function selectVariableButton(selectedButton) {

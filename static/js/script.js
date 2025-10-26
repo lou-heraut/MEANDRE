@@ -91,34 +91,34 @@ function change_url(url, start=false, actualise=true) {
     updateContent(start=start, actualise=actualise);
 }
 
-function initTitleOverlay() {
-    document.querySelectorAll('.map-title-overlay').forEach(element => {
-        const fullText = element.getAttribute('data-full');
-        const shortText = element.textContent;
-        let isExpanded = false;
+// function initTitleOverlay() {
+//     document.querySelectorAll('.map-title-overlay').forEach(element => {
+//         const fullText = element.getAttribute('data-full');
+//         const shortText = element.textContent;
+//         let isExpanded = false;
 
-        element.addEventListener('mouseenter', function() {
-            if (!isExpanded) {
-                element.classList.add('expanded');
-                element.textContent = fullText;
-                element.style.zIndex = '9999'
-                const newWidth = element.scrollWidth;
-                element.style.width = newWidth + 'px';
-                isExpanded = true;
-            }
-        });
+//         element.addEventListener('mouseenter', function() {
+//             if (!isExpanded) {
+//                 element.classList.add('expanded');
+//                 element.textContent = fullText;
+//                 element.style.zIndex = '9999'
+//                 const newWidth = element.scrollWidth;
+//                 element.style.width = newWidth + 'px';
+//                 isExpanded = true;
+//             }
+//         });
 
-        element.addEventListener('mouseleave', function() {
-            if (isExpanded) {
-                element.classList.remove('expanded');
-                element.style.width = '';
-                element.textContent = shortText;
-                element.style.zIndex = ''
-                isExpanded = false;
-            }
-        });
-    });
-}
+//         element.addEventListener('mouseleave', function() {
+//             if (isExpanded) {
+//                 element.classList.remove('expanded');
+//                 element.style.width = '';
+//                 element.textContent = shortText;
+//                 element.style.zIndex = ''
+//                 isExpanded = false;
+//             }
+//         });
+//     });
+// }
 
 
 function loadGeoJSON(fileURL) {
@@ -173,7 +173,7 @@ function updateContent(start=false, actualise=true) {
         geoJSONdata_secteurHydro= geoJSONdata[3]; 
         // geoJSONdata_cities= geoJSONdata[4];
 
-        initTitleOverlay()
+        // initTitleOverlay()
         update_data_point_debounce();
         
 	    });
@@ -292,7 +292,7 @@ function update_data_point() {
 	$('#map-QJXA-loading').css('display', 'flex');
 	$('#map-VCN10-loading').css('display', 'flex');
 
-    var n = get_n();
+    var n = default_n;
     // var variable = get_variable();
     var projection = get_projection();
     var horizon = get_horizon();
@@ -825,7 +825,7 @@ function update_grid(data_back) {
 	variable = variable.match(/([^_]*)_/)[1];
     }
     
-    var n = get_n();
+    var n = default_n;
     var horizon = get_horizon();
     
     const months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
@@ -2324,13 +2324,14 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
     let chain_text_shift = 80;
     let chain_text;
     var projection = get_projection();
+    var n = default_n;
     // if (drawer_mode === 'drawer-narratif') {
 	chain_text = "Changements " + relatif + horizon.text + " par rapport à la période de référence 1991-2020 sous le";
 	top_text = narratif_text;
 	top_text_color = narratif_color;
 
     const RCP_text = projection.RCP;
-    const model_text = "avec au moins " + get_n() + " modèles hydrologiques par point";
+    const model_text = "avec au moins " + n + " modèles hydrologiques par point";
     chain_text = chain_text + " " + RCP_text + " " + model_text;
 
     const width_max_top_text = 100;
