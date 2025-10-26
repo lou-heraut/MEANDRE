@@ -69,7 +69,7 @@ function toggle_subtab(tab_button) {
                         }
                     }
                 }
-            }, 350); // wait for expansion
+            }, 310); // wait for expansion
         }
     });
 
