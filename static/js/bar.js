@@ -23,40 +23,58 @@
 
 function toggle_subtab(tab_button) {
 
-    console.log(tab_button);
     var tab = tab_button.parentNode;
-    
     var subbars = $('.subbar');
+
     subbars.each(function() {
-	var subbar = $(this);
-	var subtabs = $("[id^='" + subbar.attr("id") + "'][class^='subbar-tab']");
-	
-	if (subbar.hasClass("expanded")) {
-	    subtabs.each(function() {
-		$(this).removeClass("expanded");
-	    });
-	    setTimeout(() => {
-		subbar.removeClass("expanded");
-		subtabs.each(function() {
-		    $(this).css("display", "none");
-		});
-	    }, 300);
-	    
-	} else if (subbar.attr("id").startsWith(tab.id)) {
-	    subbar.addClass("expanded");
-	    subtabs.each(function() {
-		$(this).css("display", "flex");
-	    });
-	    setTimeout(() => {
-		subtabs.each(function() {
-		    $(this).addClass("expanded");
-		});
-	    }, 300);
-	}
+        var subbar = $(this);
+        var subtabs = $("[id^='" + subbar.attr("id") + "'][class^='subbar-tab']");
+
+        if (subbar.hasClass("expanded")) {
+            // Collapse open subbar
+            subtabs.each(function() {
+                $(this).removeClass("expanded");
+            });
+            setTimeout(() => {
+                subbar.removeClass("expanded");
+                subtabs.each(function() {
+                    $(this).css("display", "none");
+                });
+            }, 300);
+        } 
+        else if (subbar.attr("id").startsWith(tab.id)) {
+            // Expand clicked one
+            subbar.addClass("expanded");
+            subtabs.each(function() {
+                $(this).css("display", "flex");
+            });
+            setTimeout(() => {
+                subtabs.each(function() {
+                    $(this).addClass("expanded");
+                });
+            }, 300);
+
+            // Only auto-switch if NO subtab is already selected
+            setTimeout(() => {
+                var selectedInSubbar = subtabs.filter('.selected');
+                if (selectedInSubbar.length === 0) {
+                    var firstSubtab = subtabs.first();
+                    if (firstSubtab.length > 0) {
+                        var onclickAttr = firstSubtab.attr("onclick");
+                        if (onclickAttr) {
+                            var match = onclickAttr.match(/change_url\(['"]([^'"]+)['"]\)/);
+                            if (match) {
+                                change_url(match[1]);
+                            }
+                        }
+                    }
+                }
+            }, 350); // wait for expansion
+        }
     });
 
     setTimeout(() => {
-	check_bar();
+        check_bar();
     }, 300);
 }
 
@@ -90,8 +108,6 @@ function scroll_bar_right() {
     var bar = document.getElementById('bar');
     bar.scrollBy({ left: 200, behavior: 'smooth' });
 }
-
-
 
 
 function select_tab() {
