@@ -241,17 +241,22 @@ button.chain_block_button:hover {
     visibility: visible;
 }
 
-.row-button .col-left {
-    width: 5%;
+.row-button .col-left-container {
+    width: 15%;
     display: inline-flex;
     justify-content: center; /* centre horizontalement */
     align-items: center;     /* centre verticalement */
-    text-align: center;      /* sécurité */
+}
+.row-button .col-left {
+    text-align: center;      
+}
+
+.italic {
+    font-style: italic;
 }
 
 .row-button .col-right {
-    width: 90%;
-    display: flex;
+    width: 80%;
     display: inline-block;
     text-align: justify;        
     align-items: center;
@@ -412,11 +417,13 @@ h3 {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 1rem;
 }
 
 .map {
     position: relative;
-    min-width: calc(100vw / 3 - 1rem);
+    /* min-width: calc(100vw / 3 - 1rem); */
+    min-width: calc((100vw) / 3 - 2rem); 
     aspect-ratio: 1;
 }
 
@@ -595,7 +602,7 @@ h3 {
 
 
 #action-bar {
-    position: absolute;
+    position: fixed;
     bottom: 0.5rem;
     left: 1rem;
     z-index: 1;
@@ -671,22 +678,25 @@ h3 {
     margin-bottom: 0.1rem;
 }
 
- #panel-hover_basin {
+#panel-hover_basin {
     bottom: 0.5rem;
     right: 4rem;
 }
    
 #panel-hover_code {
-    bottom: 2.5rem;
-    right: 1rem;
+    position: fixed;
+    bottom: 4.5rem;
+    left: 1rem;
 }
 #panel-hover_description {
-    bottom: 2.5rem;
-    right: 1rem;
+    position: fixed;
+    bottom: 0.5rem;
+    left: 3.5rem;
 }
 #panel-hover_secteur {
-    bottom: 0.5rem;
-    right: 4rem;
+    position: fixed;
+    bottom: 2.5rem;
+    left: 1rem;
 }
 
 

@@ -181,8 +181,8 @@ p.warning {
     width: 5rem;
     display: flex;
     justify-content: center;
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;    
+    padding-top: 1rem;
+    padding-bottom: 1rem;    
 }
 
 #grid-variable {
@@ -344,10 +344,9 @@ p.warning {
 }
 
 
-#grid-narratif {
-    /* max-width: 10rem; */
-    /* max-width: calc(100vw - 50rem); */
-}
+/* #grid-narratif {
+    max-height: 15rem;
+} */
 
 /* .sub-container-gallery-narratives {
 /*     display: flex; */
