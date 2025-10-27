@@ -181,8 +181,8 @@ p.warning {
     width: 5rem;
     display: flex;
     justify-content: center;
-    padding-top: 1rem;
-    padding-bottom: 1rem;    
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;    
 }
 
 #grid-variable {
@@ -413,9 +413,9 @@ p.warning {
 
 
 .button-gwl {
-    font-family: 'Lato', sans-serif;
+    font-family: 'Raleway', sans-serif;
     /* font-weight: 400; */
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     text-align: center;
     border-radius: 1rem;
     width: calc(100% - 1rem);
@@ -423,26 +423,42 @@ p.warning {
     justify-content: center;
     align-items: center;
     height: fit-content;
-    
+    line-height: 1.8rem;
 }
 .button-gwl.selected.gwl15 {
     color: #ffffff;
-    font-weight: bold;
     background-color: #faa91a;
 }
 .button-gwl.selected.gwl20 {
     color: #ffffff;
-    font-weight: bold;
     background-color: #f06426;
 }
 .button-gwl.selected.gwl30 {
     color: #ffffff;
-    font-weight: bold;
     background-color: #732401;
 }
-/* .button-gwl_text { */
 
-/* } */
+.button-gwl.selected.gwl15:hover {
+    color: #ffffff;
+    background-color: #fbb53a;
+}
+.button-gwl.selected.gwl20:hover {
+    color: #ffffff;
+    background-color: #f27a44;
+}
+.button-gwl.selected.gwl30:hover {
+    color: #ffffff;
+    background-color: #aa3501;
+}
+
+.button-gwl_text-deg {
+    font-size: 1.6rem;
+}
+.button-gwl.selected  {
+    font-weight: bold;
+}
+
+
 
 
 .grid-narrative_drawer {

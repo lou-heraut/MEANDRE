@@ -157,7 +157,6 @@ button {
 button.selected {
     color: #060508;
     font-weight: bold; 
-    background-color: #7BBFBA80;
 }
 
 button:hover {
@@ -165,14 +164,9 @@ button:hover {
     color: #060508;
 }
 
-button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    pointer-events: none;
-}
-.unselected button {
-    color: #89898a !important;
-}
+/* .unselected button { */
+/*     color: #89898a !important; */
+/* } */
 
 
 button.selected .notif,
@@ -209,64 +203,95 @@ button.chain_block_button:hover {
     color: #89898a;
 }
 
-.row-button {
-    display: flex;               /* simule deux colonnes */
-    width: 100%;                 /* bouton occupe toute la ligne */
-    text-align: left;            /* aligne le contenu */
-    border: none;                /* clean */
-    padding: 8px;
-    background: transparent;     /* neutre par défaut */
-    cursor: pointer;
-}
 
-.row-button .col-arrow {
-    width: 5%;
+#grid-narratif {
+    flex-grow: 1;
+}
+#grid-narratif_bunch {
     display: flex;
-    justify-content: center; /* centre horizontalement */
-    align-items: center;     /* centre verticalement */
-    text-align: center;      /* sécurité */
-    visibility: hidden;
+    flex-direction: column;
+    row-gap: 0.8rem;
+    width: fit-content;
+    max-width: 100%;  
 }
 
-.row-button.selected .col-arrow {
-    visibility: visible;
-}
-
-.row-button:hover {
-    font-weight: bold; 
-    background-color: #7BBFBA80;
-}
-
-.row-button:hover .col-arrow {
-    visibility: visible;
-}
-
-.row-button .col-left-container {
-    width: 15%;
-    display: inline-flex;
-    justify-content: center; /* centre horizontalement */
-    align-items: center;     /* centre verticalement */
-}
-.row-button .col-left {
-    text-align: center;      
-}
-
-.italic {
-    font-style: italic;
-}
-
-.row-button .col-right {
-    width: 80%;
-    display: inline-block;
-    text-align: justify;        
-    align-items: center;
-    justify-content: center;
-}
-
-.text-gray {
+.button-narratif {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch; 
+    text-align: left;
+    padding: 0 0rem;
+    /* column-gap: 0.5rem; */
+    /* width: 100%; */
+    width: auto;
+    text-align: left;
+    border: none;
+    background: transparent;
+    cursor: pointer;
     color: #89898a;
-    opacity: 0.5;
 }
+
+
+.button-narratif .cell-line {
+    border-radius: 0.1rem;
+    width: 0;
+    margin-right: 0rem;
+    background-color: transparent;
+    transition: margin-right 0.25s ease, width 0.25s ease, background-color 0.25s ease;
+}
+.button-narratif.selected .cell-line {
+    width: 0.6rem;
+    margin-right: 0.5rem;
+}
+
+.button-narratif .narratif-name {
+    font-family: "Raleway", sans-serif;
+    font-size: 1.1rem;
+    opacity: 0.7;
+}
+.button-narratif:hover .narratif-name {
+    /* font-weight: bold; */
+    opacity: 1;
+}
+.button-narratif.selected .narratif-name {
+    font-weight: normal;
+    opacity: 1;
+}
+
+.button-narratif .narratif-name-id {
+    font-weight: 700;
+}
+
+.button-narratif .narratif-description {
+    font-size: 1rem;
+    font-weight: normal;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    text-align: start; 
+    
+}
+.button-narratif:hover .narratif-description {
+    font-weight: normal;
+}
+.button-narratif.selected .narratif-description {
+    font-weight: normal;
+}
+.button-narratif .narratif-description-chain {
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: #acacad;
+    line-height: 0.9rem;
+}
+.button-narratif:hover .narratif-description-chain {
+    color: #89898a;
+}
+.button-narratif.selected .narratif-description-chain {
+    color: #89898a;
+}
+
+
+
 
 
 .reduce-space {
@@ -680,7 +705,7 @@ h3 {
 
 #panel-hover_basin {
     bottom: 0.5rem;
-    right: 4rem;
+    left: 0.5rem;
 }
    
 #panel-hover_code {
