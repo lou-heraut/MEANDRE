@@ -524,9 +524,9 @@ function updateStorylineButton(reset=false){
                     // cell_arrow.style.color = val.narratif_couleur;
 		    cell_line.style.backgroundColor = val.narratif_couleur;
                     cell_name.style.color = val.narratif_couleur;
-                    cell_name.innerHTML = `<span class="narratif-name-id">${val.narratif_id}</span> &#8211; ${families[val.famille_id]}`;
-                    cell_description.innerHTML = `<span class="narratif-description-chain"><i>GCM</i> ${val.gcm} | <i>RCM</i> ${val.rcm} | <i>HM</i> ${val.hm}</span>
-                                                  <span>${val.narratif_description}</span>`;
+                    cell_name.innerHTML = `<div><span class="narratif-name-id">${val.narratif_id}</span> &#8211; ${families[val.famille_id]}</div>
+                                           <span class="narratif-description-chain"><i>GCM</i> ${val.gcm} | <i>RCM</i> ${val.rcm} | <i>HM</i> ${val.hm}</span>`;
+                    cell_description.innerHTML = `<span>${val.narratif_description}</span>`;
                     
                     // cell_description.textContent = `${val.narratif_description}<br> GCM: ${val.gcm}, RCM: ${val.rcm}, HM: ${val.hm}`;
                     
