@@ -536,8 +536,8 @@ function updateStorylineButton(reset=false){
 
                         // const cell_name = document.getElementById(`cell-storyline1-name`);
                         // const cell_description = document.getElementById(`cell-storyline1`);
-                        // cell_name.style.backgroundColor = stroke_basin_selected
-                        // cell_description.style.backgroundColor = stroke_basin_selected
+                        // cell_name.style.backgroundColor = fill_basin_selected
+                        // cell_description.style.backgroundColor = fill_basin_selected
 
                         // const cell = document.getElementById("cell_name");
                         // cell.style.backgroundColor = selected_storyline;
@@ -585,8 +585,8 @@ function selectStorylineButton(selectedButton) {
             } else {
                 button.classList.add('selected')
                 // button_name.classList.add('selected')
-                // cell_name.style.backgroundColor = stroke_basin_selected
-                // cell_description.style.backgroundColor = stroke_basin_selected
+                // cell_name.style.backgroundColor = fill_basin_selected
+                // cell_description.style.backgroundColor = fill_basin_selected
             }
         });
 
@@ -1074,7 +1074,10 @@ const stroke_france = "#89898A";
 const fill_basinHydro = "transparent";
 const stroke_basinHydro = "#ACACAD";
 const stroke_secteurHydro = "#bcbcbeff";
-const stroke_basin_selected = "#7BBFBA80";
+
+const fill_basin_hover = "#66c1bf30";
+const fill_basin_selected = "#66c1bf61";
+
 let selectedRegionId = "K";
 const stroke_river = "#B0D9D6";
 const stroke_river_selected = "#7BBFBA";
@@ -1121,7 +1124,7 @@ function updateBasinPanelById(selectedRegionId) {
         f => f.properties.name === selectedRegionId
     );
     panel.style.display = "block";
-    panelContent.innerHTML = `<span>${feature.properties.description}</span>`;
+    panelContent.innerHTML = `<span>${feature.properties.name} &#8211; ${feature.properties.description}</span>`;
 }
 
 
@@ -1166,41 +1169,24 @@ function update_map_region(id_svg, svgElement) {
 
         // let selectedRegionId = null;
         layer_basin.selectAll("path.basinHydro")
-            .data(simplifiedGeoJSON_basinHydro.features, d => d.properties.name)  // clé unique
+            .data(simplifiedGeoJSON_basinHydro.features, d => d.properties.name)
             .join("path")
             .attr("class", "basinHydro")
             .style("pointer-events", "all")
-            .attr("fill", d => d.properties.name === selectedRegionId ? stroke_basin_selected : fill_basinHydro)
+            .attr("fill", d => d.properties.name === selectedRegionId ? fill_basin_selected : fill_basinHydro)
             .attr("stroke", stroke_basinHydro)
             .attr("stroke-width", strokeWith_basinHydro)
             .attr("stroke-linejoin", "miter")
             .attr("stroke-miterlimit", 1)
             .attr("d", pathGenerator)
             .on("click", function(event, d) {
-                // if (selectedRegionId === d.properties.name) {
-                //     selectedRegionId = null;  // désélection
-                //     document.getElementById("panel-hover_basin").style.display = "none";
-                //     updateStorylineButton(reset=true)
-                // } else {
                 if (selectedRegionId !== d.properties.name) {
                     selectedRegionId = d.properties.name;
-
-                    // document.getElementById("panel-hover_basin").style.display = "block";
-                    // document.getElementById("panel-hover-content_basin").innerHTML =
-                        // "<span style='font-weight: 900; color:" + selectedRegionId ? `${ d.properties.description}` : "Aucun bassin sélectionné" + "'>" +
-                        // d.properties.TopoOH + "</span>"; 
-
 		    updateBasinPanelById(selectedRegionId);
-		    
-                    // Met à jour le fill des polygones
                     layer_basin.selectAll("path.basinHydro")
-                        .attr("fill", d => d.properties.name === selectedRegionId ? stroke_basin_selected : fill_basinHydro);
-
+                        .attr("fill", d => d.properties.name === selectedRegionId ? fill_basin_selected : fill_basinHydro);
                     redrawMap();
-                    // zoomToRegion(selectedRegionId, "#svg-france-QA")
                     updateStorylineButton();
-                    // updateMaps();
-                    
                 }
                 
             })
@@ -1210,7 +1196,7 @@ function update_map_region(id_svg, svgElement) {
                 d3.select(this).attr("data-original-fill", d3.select(this).attr("fill"));
             })
             .on("mouseover", function(event, d) {
-                d3.select(this).attr("fill", stroke_basin_selected); // couleur au survol
+                d3.select(this).attr("fill", fill_basin_hover); // couleur au survol
             })
             .on("mouseout", function(event, d) {
                 const original = d3.select(this).attr("data-original-fill");
@@ -1252,8 +1238,6 @@ function update_map_region(id_svg, svgElement) {
     const layer_france = svgElement.append("g").attr("class", "layer-france");
     const layer_river = svgElement.append("g").attr("class", "layer-river");
     const layer_basin = svgElement.append("g").attr("class", "layer-basinHydro");
-
-
     
     // Dimensions
     const container = document.querySelector("#grid-mini-map_map");
@@ -1446,6 +1430,31 @@ function update_map(id_svg, svgElement, data_back) {
         }
     }
 
+
+    // Handle window resizing
+    function handleResize() {
+	const elements = mapElements[id_svg];
+	if (!elements) return;
+
+	// Recalculate container dimensions
+	elements.width = elements.container.clientWidth;
+	elements.height = elements.container.clientHeight;
+
+	// Update projection to fit new container
+	elements.projectionMap.fitExtent(
+            [[margin, margin], [elements.width - margin, elements.height - margin]],
+            geoJSONdata_france
+	);
+
+	// Redraw the map
+	redrawMap(id_svg);
+    }
+
+    // Listen for browser resize events
+    window.addEventListener("resize", handleResize);
+
+    
+    
     // Créer ou réutiliser le zoom partagé
     if (!sharedZoom) {
         const redrawMap_debounce = debounce((mapIds) => {
@@ -1577,9 +1586,12 @@ function update_map(id_svg, svgElement, data_back) {
     
     // Dessiner la carte initiale
     redrawMap(id_svg);
+    handleResize();
 
     return svgElement;
 }
+
+
 
 // Fonction pour zoomer sur une région spécifique (sans redessiner la carte)
 function zoomToRegion(selectedRegionId, svgId) {

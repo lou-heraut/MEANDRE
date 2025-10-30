@@ -34,20 +34,6 @@
 /* } */
 
 
-#container-gallery {
-    flex: 1;
-    padding-top: 1rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    display: flex;
-    height: auto;
-    transition: all 0.3s ease;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 1rem;
-    align-items: flex-end;
-}
-
 .gallery-item,
 .gallery-item-small,
 .gallery-arrow {
@@ -333,8 +319,9 @@ p.warning {
 
 
 #grid-mini-map_map {
-    height: 16rem;
-    width: 16rem;
+    aspect-ratio: 1;
+    height: 15rem;
+    width: 15rem;
     overflow: hidden;
     display: flex;
 }
