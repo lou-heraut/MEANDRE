@@ -1198,14 +1198,12 @@ function update_map(id_svg, svgElement, data_back) {
 
 
 
-
-
-
 function isMapZoomed() {
     return k_simplify !== k_simplify_ref;
 }
 
 
+const stroke_selectPoint = "#3b3b3c";
 
 function highlight_selected_point() {
 
@@ -1232,7 +1230,7 @@ function highlight_selected_point() {
 	    if (clickedPoint.node()) {
 		clickedPoint
 		    .attr("r", 4)
-		    .attr("stroke", "#060508")
+		    .attr("stroke", stroke_selectPoint)
 		    .attr("stroke-width", 1)
 		    .classed("clicked", true);
 
@@ -1351,7 +1349,7 @@ function redrawPoint(svgElement, data_back) {
 
 	    .on("mouseover", function(event, d) {
 		if (!d3.select(this).classed("clicked")) {
-		    d3.select(this).attr("stroke", "#060508");
+		    d3.select(this).attr("stroke", stroke_selectPoint);
 		}
 
 		document.getElementById("panel-hover").style.display = "block";
@@ -1740,7 +1738,7 @@ function drawSVG_for_export(id_svg, Height, Width, narratif_text="", narratif_co
         .data([
 	    "Ces résultats sont issus de projections hydrologiques réalisées sur la France. La mise à jour",
 	    "de ces projections a été réalisé entre 2022 et 2024 dans le cadre du projet national Explore2.",
-	    "Ces résultats sont un aperçu de quelques futures possibles pour la ressource en eau."
+	    "Ces résultats sont un aperçu de quelques futurs possibles pour la ressource en eau."
         ])
         .enter().append("tspan")
         .attr("x", footer_text_left)
