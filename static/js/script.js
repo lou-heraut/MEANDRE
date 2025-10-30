@@ -1078,10 +1078,10 @@ const stroke_secteurHydro = "#bcbcbeff";
 const fill_basin_hover = "#66c1bf30";
 const fill_basin_selected = "#66c1bf61";
 
-let selectedRegionId = "K";
+
 const stroke_river = "#B0D9D6";
 const stroke_river_selected = "#7BBFBA";
-const stroke_secteur_selected = "#636363ff"
+const stroke_secteur_selected = "#656769"
 
 const minZoom = 1;
 const maxZoom = 10;
@@ -1129,6 +1129,8 @@ function updateBasinPanelById(selectedRegionId) {
 
 
 
+let selectedRegionId = "K";
+
 function update_map_region(id_svg, svgElement) {
 
     riverLength = riverLength_max;
@@ -1136,6 +1138,20 @@ function update_map_region(id_svg, svgElement) {
     d3.select(id_svg).selectAll("*").remove();
 
     var fact = 2;
+
+    function refreshBasinColors() {
+	layer_basin.selectAll("path.basinHydro")
+            .attr("fill", d => 
+		d.properties.name === selectedRegionId 
+                    ? fill_basin_selected 
+                    : fill_basinHydro
+            )
+            .attr("data-original-fill", d => 
+		d.properties.name === selectedRegionId 
+                    ? fill_basin_selected 
+                    : fill_basinHydro
+            );
+    }
 
     function redrawMap() {
         const pathGenerator = d3.geoPath(projectionMap);
@@ -1167,7 +1183,6 @@ function update_map_region(id_svg, svgElement) {
             .transition()
             .duration(10);
 
-        // let selectedRegionId = null;
         layer_basin.selectAll("path.basinHydro")
             .data(simplifiedGeoJSON_basinHydro.features, d => d.properties.name)
             .join("path")
@@ -1179,17 +1194,26 @@ function update_map_region(id_svg, svgElement) {
             .attr("stroke-linejoin", "miter")
             .attr("stroke-miterlimit", 1)
             .attr("d", pathGenerator)
-            .on("click", function(event, d) {
-                if (selectedRegionId !== d.properties.name) {
-                    selectedRegionId = d.properties.name;
+            // .on("click", function(event, d) {
+            //     if (selectedRegionId !== d.properties.name) {
+            //         selectedRegionId = d.properties.name;
+	    // 	    updateBasinPanelById(selectedRegionId);
+		    
+            //         layer_basin.selectAll("path.basinHydro")
+            //             .attr("fill", d => d.properties.name === selectedRegionId ? fill_basin_selected : fill_basinHydro);
+            //         redrawMap();
+
+	    // 	    updateStorylineButton();
+            //     }        
+            // })
+	    .on("click", function(event, d) {
+		if (selectedRegionId !== d.properties.name) {
+		    selectedRegionId = d.properties.name;
 		    updateBasinPanelById(selectedRegionId);
-                    layer_basin.selectAll("path.basinHydro")
-                        .attr("fill", d => d.properties.name === selectedRegionId ? fill_basin_selected : fill_basinHydro);
-                    redrawMap();
-                    updateStorylineButton();
-                }
-                
-            })
+		    refreshBasinColors();
+		    updateStorylineButton();
+		}
+	    })
             .attr("cursor", "pointer")
             .each(function() {
                 // stocke la couleur originale dans l'élément lui-même
@@ -1218,16 +1242,9 @@ function update_map_region(id_svg, svgElement) {
             .attr("d", pathGenerator)
             .transition()
             .duration(1000);
-
-        // if (data_back) {
-        //     redrawPoint(svgElement, data_back, projectionMap);
-        //     highlight_selected_point();
-        // }
     }
     const redrawMap_debounce = debounce(redrawMap, 100);
 
-    // window.addEventListener("resize", handleResize.bind(null, k_simplify, riverLength));
-    
     const root = d3.select(id_svg)
     .attr("width", "100%")
     .attr("height", "100%");
@@ -1256,8 +1273,6 @@ function update_map_region(id_svg, svgElement) {
 
 
     redrawMap_debounce();
-    
-    // window.addEventListener("resize", handleResize.bind(null, k_simplify, riverLength));
     
     return svgElement
 }
@@ -1657,6 +1672,8 @@ function isMapZoomed() {
 }
 
 
+const stroke_selectPoint = "#3b3b3c";
+
 function highlight_selected_point() {
 
     if (selected_code) {
@@ -1682,7 +1699,7 @@ function highlight_selected_point() {
 	    if (clickedPoint.node()) {
 		clickedPoint
 		    .attr("r", 4)
-		    .attr("stroke", "#080505ff")
+		    .attr("stroke", stroke_selectPoint)
 		    .attr("stroke-width", 1)
 		    .classed("clicked", true);
 
@@ -1804,7 +1821,7 @@ function redrawPoint(svgElement, data_back, projectionMap) {
 	    .on("mouseover", function(event, d) {
             if (!show_point){
                 if (!d3.select(this).classed("clicked")) {
-                    d3.select(this).attr("stroke", "#060508").raise();
+                    d3.select(this).attr("stroke", stroke_selectPoint).raise();
                 }
 
                 // document.getElementById("panel-hover_description").style.display = "block";

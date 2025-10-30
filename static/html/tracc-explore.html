@@ -25,97 +25,99 @@
 <div id="gallery-map">
     
     <div id="container-gallery">
+
+	<div id="grid-mini-map" class="gallery-item bunch column">
+	    <span class="grid-element_title">Sélectionnez un territoire</span>
 	    
-	    <div id="grid-mini-map" class="gallery-item bunch column">
-		<span class="grid-element_title">Sélectionnez un territoire</span>
+	    <div id="grid-mini-map_map">
+		<div id="map-region-loading" class="container-loading">
+		    <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+		</div>
 		
-		<div id="grid-mini-map_map">
-		    <div id="map-region-loading" class="container-loading">
-			<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+		<svg id="svg-france-region"></svg>
+
+		<div id="panel-hover_basin" class="panel-hover">
+		    <div class="bunch row column-small-gap center cross-center">
+			<div id="panel-hover-content_basin" class="panel-hover-content"></div>
 		    </div>
-		    
-		    <svg id="svg-france-region"></svg>
+		</div>		    
+	    </div>
+	</div>
 
-		    <div id="panel-hover_basin" class="panel-hover">
-			<div class="bunch row column-small-gap center cross-center">
-			    <div id="panel-hover-content_basin" class="panel-hover-content"></div>
-			</div>
-		    </div>		    
+	<div id="container-gwl-fiche" class="bunch column column-small-gap row-small-gap">
+	    <div id="grid-gwl" class="gallery-item bunch column">
+		<span class="grid-element_title">Sélectionnez un niveau de<br>réchauffement</span>
+		<span class="grid-gwl_text"><i>Vivre à...</i></span>
+		
+		<div id="bunch-gwl" class="bunch row column-small-gap row-small-gap">
+		    <button id="button-tracc40" value="gwl30" class="button-gwl gwl30 selected"
+				onclick="selectTraccButton(this);">
+			<span>+<span class="button-gwl_text-deg">4</span>°C</span>
+		    </button>
+		    <button id="button-tracc27" value="gwl20" class="button-gwl gwl20"
+				onclick="selectTraccButton(this);">
+			<span>+<span class="button-gwl_text-deg">2.7</span>°C</span>
+		    </button>
+		    <button id="button-tracc20" value="gwl15" class="button-gwl gwl15"
+				onclick="selectTraccButton(this);">
+			<span>+<span class="button-gwl_text-deg">2</span>°C</span>
+		    </button>
 		</div>
 	    </div>
 
-	    <div class="bunch column column-small-gap row-small-gap">
-		<div id="grid-gwl" class="gallery-item bunch column">
-		    <span class="grid-element_title">Sélectionnez un niveau de<br>réchauffement</span>
-		    <span class="grid-gwl_text"><i>Vivre à...</i></span>
-		    
-		    <div id="bunch-gwl" class="bunch row column-small-gap row-small-gap">
-			<button id="button-tracc40" value="gwl30" class="button-gwl gwl30 selected"
-				    onclick="selectTraccButton(this);">
-			    <span>+<span class="button-gwl_text-deg">4</span>°C</span>
-			</button>
-			<button id="button-tracc27" value="gwl20" class="button-gwl gwl20"
-				    onclick="selectTraccButton(this);">
-			    <span>+<span class="button-gwl_text-deg">2.7</span>°C</span>
-			</button>
-			<button id="button-tracc20" value="gwl15" class="button-gwl gwl15"
-				    onclick="selectTraccButton(this);">
-			    <span>+<span class="button-gwl_text-deg">2</span>°C</span>
-			</button>
+	    <div id="grid-fiche" class="gallery-item">
+		<button id="export-fiche" onclick="exportFiche()">
+		    <span class="material-icons-outlined">file_open</span>
+		    <span>Fiche de synthèse</span>
+		</button>
+	    </div>
+	    
+	</div>
+
+
+	<div id="grid-colorbar" class="gallery-item">
+	    <svg id="svg-colorbar"></svg>
+	</div>
+
+	
+	<div id="grid-narratif" class="gallery-item bunch column">
+	    <span class="grid-element_title">Chaînes de modélisation pour chaque narratif</span>
+
+	    <div id="grid-narratif_bunch">
+		<button id="button-storyline1" class="button-narratif" onclick="selectStorylineButton(this)">
+		    <div id="storyline1-cell-line" class="cell-line"></div>
+		    <div class="bunch column">
+			<span id="cell-storyline1-name" class="narratif-name"></span>
+			<span id="cell-storyline1" class="narratif-description"></span>
+		    </div>			
+		</button>
+
+		<button id="button-storyline2" class="button-narratif" onclick="selectStorylineButton(this)">
+		    <div id="storyline2-cell-line" class="cell-line"></div>
+		    <div class="bunch column">
+			<span id="cell-storyline2-name" class="narratif-name"></span>
+			<span id="cell-storyline2" class="narratif-description"></span>
 		    </div>
-		</div>
+		</button>
 
-		<div id="grid-fiche" class="gallery-item">
-		    <button id="export-fiche" onclick="exportFiche()">
-			<span class="material-icons-outlined">file_download</span>
-			<span>fiche</span>
-		    </button>
-		</div>
-		    
+		<button id="button-storyline3" class="button-narratif" onclick="selectStorylineButton(this)">
+		    <div id="storyline3-cell-line" class="cell-line"></div>
+		    <div class="bunch column">
+			<span id="cell-storyline3-name" class="narratif-name"></span>
+			<span id="cell-storyline3" class="narratif-description"></span>
+		    </div>
+		</button>
+
+		<button id="button-storyline4" class="button-narratif" onclick="selectStorylineButton(this)">
+		    <div id="storyline4-cell-line" class="cell-line"></div>
+		    <div class="bunch column">
+			<span id="cell-storyline4-name" class="narratif-name"></span>
+			<span id="cell-storyline4" class="narratif-description"></span>
+		    </div>
+		</button>
 	    </div>
-
-	    <div id="grid-narratif" class="gallery-item bunch column">
-		<span class="grid-element_title">Chaînes de modélisation pour chaque narratif</span>
-
-		<div id="grid-narratif_bunch">
-		    <button id="button-storyline1" class="button-narratif" onclick="selectStorylineButton(this)">
-			<div id="storyline1-cell-line" class="cell-line"></div>
-			<div class="bunch column">
-			    <span id="cell-storyline1-name" class="narratif-name"></span>
-			    <span id="cell-storyline1" class="narratif-description"></span>
-			</div>			
-		    </button>
-
-		    <button id="button-storyline2" class="button-narratif" onclick="selectStorylineButton(this)">
-			<div id="storyline2-cell-line" class="cell-line"></div>
-			<div class="bunch column">
-			    <span id="cell-storyline2-name" class="narratif-name"></span>
-			    <span id="cell-storyline2" class="narratif-description"></span>
-			</div>
-		    </button>
-
-		    <button id="button-storyline3" class="button-narratif" onclick="selectStorylineButton(this)">
-			<div id="storyline3-cell-line" class="cell-line"></div>
-			<div class="bunch column">
-			    <span id="cell-storyline3-name" class="narratif-name"></span>
-			    <span id="cell-storyline3" class="narratif-description"></span>
-			</div>
-		    </button>
-
-		    <button id="button-storyline4" class="button-narratif" onclick="selectStorylineButton(this)">
-			<div id="storyline4-cell-line" class="cell-line"></div>
-			<div class="bunch column">
-			    <span id="cell-storyline4-name" class="narratif-name"></span>
-			    <span id="cell-storyline4" class="narratif-description"></span>
-			</div>
-		    </button>
-		</div>
-	    </div>
-
-
-	    <div id="grid-colorbar" class="gallery-item">
-		<svg id="svg-colorbar"></svg>
-	    </div>
+	</div>
+	
     </div>
 
     <div id="container-map">
