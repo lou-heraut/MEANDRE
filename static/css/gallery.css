@@ -326,10 +326,14 @@ p.warning {
     display: flex;
 }
 
-#grid-gwl{
+#grid-gwl {
     max-width: 9rem;
 }
 
+
+/* #grid-fiche { */
+/*     width: 100%; */
+/* } */
 
 /* #grid-narratif {
     max-height: 15rem;

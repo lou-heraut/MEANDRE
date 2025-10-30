@@ -43,25 +43,35 @@
 		    </div>		    
 		</div>
 	    </div>
-	    
-	    <div id="grid-gwl" class="gallery-item bunch column">
-		<span class="grid-element_title">Sélectionnez un niveau de<br>réchauffement</span>
-		<span class="grid-gwl_text"><i>Vivre à...</i></span>
-		
-		<div id="bunch-gwl" class="bunch row column-small-gap row-small-gap">
-		    <button id="button-tracc40" value="gwl30" class="button-gwl gwl30 selected"
-				onclick="selectTraccButton(this);">
-			<span>+<span class="button-gwl_text-deg">4</span>°C</span>
-		    </button>
-		    <button id="button-tracc27" value="gwl20" class="button-gwl gwl20"
-				onclick="selectTraccButton(this);">
-			<span>+<span class="button-gwl_text-deg">2.7</span>°C</span>
-		    </button>
-		    <button id="button-tracc20" value="gwl15" class="button-gwl gwl15"
-				onclick="selectTraccButton(this);">
-			<span>+<span class="button-gwl_text-deg">2</span>°C</span>
+
+	    <div class="bunch column column-small-gap row-small-gap">
+		<div id="grid-gwl" class="gallery-item bunch column">
+		    <span class="grid-element_title">Sélectionnez un niveau de<br>réchauffement</span>
+		    <span class="grid-gwl_text"><i>Vivre à...</i></span>
+		    
+		    <div id="bunch-gwl" class="bunch row column-small-gap row-small-gap">
+			<button id="button-tracc40" value="gwl30" class="button-gwl gwl30 selected"
+				    onclick="selectTraccButton(this);">
+			    <span>+<span class="button-gwl_text-deg">4</span>°C</span>
+			</button>
+			<button id="button-tracc27" value="gwl20" class="button-gwl gwl20"
+				    onclick="selectTraccButton(this);">
+			    <span>+<span class="button-gwl_text-deg">2.7</span>°C</span>
+			</button>
+			<button id="button-tracc20" value="gwl15" class="button-gwl gwl15"
+				    onclick="selectTraccButton(this);">
+			    <span>+<span class="button-gwl_text-deg">2</span>°C</span>
+			</button>
+		    </div>
+		</div>
+
+		<div id="grid-fiche" class="gallery-item">
+		    <button id="export-fiche" onclick="exportFiche()">
+			<span class="material-icons-outlined">file_download</span>
+			<span>fiche</span>
 		    </button>
 		</div>
+		    
 	    </div>
 
 	    <div id="grid-narratif" class="gallery-item bunch column">
