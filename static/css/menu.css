@@ -129,7 +129,7 @@
 
 
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
     
     #container-menu.expanded {
 	width: 100vw;

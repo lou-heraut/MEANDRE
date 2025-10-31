@@ -170,6 +170,23 @@
     margin-right: 0.3rem;
 }
 
+
+#tab_MEANDRE {
+    padding-left: 1rem;
+}
+#tab_MEANDRE-text {
+    border: solid 2px #060508;
+    border-radius: 1rem;
+}
+.bar-tab:hover #tab_MEANDRE-text {
+    border: solid 2px #89898a;
+}
+
+
+
+
+
+
 #button_exploration-avancee {
     position: absolute;
     right: 0;
@@ -331,7 +348,7 @@
 }
 
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
 
 
     #container-logo-bar-sep {
@@ -351,11 +368,10 @@
     }
     
     #bar {
-	width: calc(100vw - 3rem - 6px);
+	width: 100vw;
 	height: 3rem;
     }
     #bar.expanded {
-	/* width: calc(100vw - 18rem - 3px); */
 	width: 0rem;
     }
 

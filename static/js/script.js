@@ -175,7 +175,7 @@ function updateContent(start=false, actualise=true) {
 
 		// initTitleOverlay()
 		// update_data_point_debounce();
-		svgFrance_region = update_map_region("#svg-france-region", svgFrance_region);
+		svgFrance_region = update_mini_map("#svg-france-region", svgFrance_region);
 		svgFrance_QA = update_map("#svg-france-QA", svgFrance_QA, null);
 		svgFrance_QJXA = update_map("#svg-france-QJXA", svgFrance_QJXA, null);
 		svgFrance_VCN10 = update_map("#svg-france-VCN10", svgFrance_VCN10, null);
@@ -307,7 +307,7 @@ function update_data_point() {
     // // Initialize top left for region selection
     // if (start) {
         // start = false
-        // svgFrance_region = update_map_region("#svg-france-region", svgFrance_region);
+        // svgFrance_region = update_mini_map("#svg-france-region", svgFrance_region);
             // $('#map-region-loading').css('display', 'none');
     // }
     if (projection) {
@@ -355,22 +355,7 @@ function update_data_point() {
             data_point_QJXA = data_back.data_point_QJXA;
             data_point_VCN10 = data_back.data_point_VCN10;
             
-            zoomToRegion(selectedRegionId, "#svg-france-QA");
-
-            // mapElements[id_svg] = {
-            //     svgElement,
-            //     layer_france,
-            //     layer_river,
-            //     layer_basin,
-            //     projectionMap,
-            //     container,
-            //     width,
-            //     height,
-            //     data_back
-            // };
-
-            // redrawPoint(elements.svgElement, elements.data_point_VCN10);
-
+            zoomToRegion(selectedRegionId, "#svg-france-QA"); //##############################
 
             svgFrance_QA = update_map("#svg-france-QA", svgFrance_QA, data_point_QA);
             $('#map-QA-loading').css('display', 'none');
@@ -384,8 +369,6 @@ function update_data_point() {
         
     } else {
         // Empty maps
-        // svgFrance_region = update_map_region("#svg-france-region", svgFrance_region);
-        // $('#map-region-loading').css('display', 'none');
         svgFrance_QA = update_map("#svg-france-QA", svgFrance_QA, null);
         $('#map-QA-loading').css('display', 'none');
         svgFrance_QJXA = update_map("#svg-france-QJXA", svgFrance_QJXA, null);
@@ -1050,21 +1033,10 @@ function draw_colorbar(data_back) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 let selected_code = null;
+let selectedRegionId = "K";
+
+const k_simplify_ref = 0.1;
 
 const fill_entiteHydro = "transparent";
 const stroke_entiteHydro = "#000000";
@@ -1078,25 +1050,9 @@ const stroke_secteurHydro = "#bcbcbeff";
 const fill_basin_hover = "#66c1bf30";
 const fill_basin_selected = "#66c1bf61";
 
-
 const stroke_river = "#B0D9D6";
 const stroke_river_selected = "#7BBFBA";
 const stroke_secteur_selected = "#656769"
-
-const minZoom = 1;
-const maxZoom = 10;
-const maxPan = 0.3;
-const scale = 3.5;
-
-const transitionDuration = 500;
-
-const k_simplify_ref = 0.1;
-let k_simplify = k_simplify_ref;
-
-const riverLength_max = 0.4;
-const riverLength_min = 0;
-// let riverLength = riverLength_max;
-let riverLength;
 
 const strokeWith_france = 2;
 const strokeWith_basinHydro = 1;
@@ -1104,12 +1060,6 @@ const strokeWith_river_max = 1.5;
 const strokeWith_river_min = 0.4;
 const strokeWith_secteurHydro = 0.7
 
-let width = window.innerHeight;
-let height = window.innerHeight;
-
-let projectionMap;
-
-let currentZoomLevel = 1;
 
 
 function updateBasinPanelById(selectedRegionId) {
@@ -1128,12 +1078,9 @@ function updateBasinPanelById(selectedRegionId) {
 }
 
 
+function update_mini_map(id_svg, svgElement) {
 
-let selectedRegionId = "K";
-
-function update_map_region(id_svg, svgElement) {
-
-    riverLength = riverLength_max;
+    let riverLength = riverLength_max;
     
     d3.select(id_svg).selectAll("*").remove();
 
@@ -1153,8 +1100,8 @@ function update_map_region(id_svg, svgElement) {
             );
     }
 
-    function redrawMap() {
-        const pathGenerator = d3.geoPath(projectionMap);
+    function redrawMiniMap() {
+        const pathGenerator = d3.geoPath(projectionMiniMap);
         const selectedGeoJSON_river = {
             type: "FeatureCollection",
             features: geoJSONdata_river.features.filter((d) => {
@@ -1164,7 +1111,6 @@ function update_map_region(id_svg, svgElement) {
         const simplifiedselectedGeoJSON_river = geotoolbox.simplify(selectedGeoJSON_river, { k: k_simplify, merge: false });
         const simplifiedGeoJSON_basinHydro = geotoolbox.simplify(geoJSONdata_basinHydro, { k: k_simplify, merge: false });
         const simplifiedGeoJSON_france = geotoolbox.simplify(geoJSONdata_france, { k: k_simplify, merge: false });
-        // const selectedGeoJSON_river = geotoolbox.filter(geoJSONdata_river, (d) => d.norm >= riverLength);
 
         layer_river.selectAll("path.river")
             .data(simplifiedselectedGeoJSON_river.features)
@@ -1194,18 +1140,6 @@ function update_map_region(id_svg, svgElement) {
             .attr("stroke-linejoin", "miter")
             .attr("stroke-miterlimit", 1)
             .attr("d", pathGenerator)
-            // .on("click", function(event, d) {
-            //     if (selectedRegionId !== d.properties.name) {
-            //         selectedRegionId = d.properties.name;
-	    // 	    updateBasinPanelById(selectedRegionId);
-		    
-            //         layer_basin.selectAll("path.basinHydro")
-            //             .attr("fill", d => d.properties.name === selectedRegionId ? fill_basin_selected : fill_basinHydro);
-            //         redrawMap();
-
-	    // 	    updateStorylineButton();
-            //     }        
-            // })
 	    .on("click", function(event, d) {
 		if (selectedRegionId !== d.properties.name) {
 		    selectedRegionId = d.properties.name;
@@ -1243,7 +1177,7 @@ function update_map_region(id_svg, svgElement) {
             .transition()
             .duration(1000);
     }
-    const redrawMap_debounce = debounce(redrawMap, 100);
+    const redrawMiniMap_debounce = debounce(redrawMiniMap, 100);
 
     const root = d3.select(id_svg)
     .attr("width", "100%")
@@ -1268,29 +1202,37 @@ function update_map_region(id_svg, svgElement) {
     const mapHeight = height - margin * 2;
 
     // Projection avec fitSize - calcule automatiquement scale et translate
-    const projectionMap = d3.geoMercator()
+    const projectionMiniMap = d3.geoMercator()
     .fitExtent([[-margin, margin], [width - margin, height - 2*margin]], geoJSONdata_france);
 
-
-    redrawMap_debounce();
+    redrawMiniMap_debounce();
     
     return svgElement
 }
 
 
 
+const minZoom = 1;
+const maxZoom = 4;
+const maxPan = 0;
+const scale = 3.5;
+// let currentZoomLevel = 1;
+
+let k_simplify = k_simplify_ref;
+
+const riverLength_max = 0.4;
+const riverLength_min = 0;
+let riverLength;
 
 
-const mapIds = ["#svg-france-QA", "#svg-france-QJXA", "#svg-france-VCN10"];
+const id_svg_ALL = ["#svg-france-QA", "#svg-france-QJXA", "#svg-france-VCN10"];
 
 let sharedZoom;
-let isSyncingZoom = false; // Flag pour éviter les boucles
-
-// Stockage des éléments de chaque carte
 const mapElements = {};
 
 
 function update_map(id_svg, svgElement, data_back) {
+
     riverLength = riverLength_max;
     
     d3.select(id_svg).selectAll("*").remove();
@@ -1317,12 +1259,13 @@ function update_map(id_svg, svgElement, data_back) {
     let height = container.clientHeight;
 
     // Marge pour éviter que la carte touche les bords
-    const margin = 10;
+    const margin = 5;
 
     // Projection avec fitExtent
     const projectionMap = d3.geoMercator()
-        .fitExtent([[margin, margin], [width - margin, height - margin]], geoJSONdata_france);
+          .fitExtent([[margin, margin], [width - margin, height - margin]], geoJSONdata_france);
 
+    
     // État pour tracker les éléments survolés
     const hoverState = {
         hoveredRiver: null,
@@ -1341,7 +1284,6 @@ function update_map(id_svg, svgElement, data_back) {
         container,
         width,
         height,
-        data_back,
         hoverState
     };
 
@@ -1357,10 +1299,10 @@ function update_map(id_svg, svgElement, data_back) {
 
     // Fonction redrawMap spécifique à cette carte
     function redrawMap(mapId) {
-        const elements = mapElements[mapId];
-        if (!elements) return;
+        const element = mapElements[mapId];
+        if (!element) return;
 
-        const pathGenerator = d3.geoPath(elements.projectionMap);
+        const pathGenerator = d3.geoPath(element.projectionMap);
         const selectedGeoJSON_river = {
             type: "FeatureCollection",
             features: geoJSONdata_river.features.filter((d) => {
@@ -1373,7 +1315,7 @@ function update_map(id_svg, svgElement, data_back) {
         const simplifiedGeoJSON_france = geotoolbox.simplify(geoJSONdata_france, { k: k_simplify, merge: false });
 
         // Couche rivières
-        elements.layer_river.selectAll("path.river")
+        element.layer_river.selectAll("path.river")
             .data(simplifiedselectedGeoJSON_river.features)
             .join("path")
             .attr("class", "river")
@@ -1389,7 +1331,7 @@ function update_map(id_svg, svgElement, data_back) {
             .attr("d", pathGenerator);
 
         // Couche bassins
-        elements.layer_basin.selectAll("path.basinHydro")
+        element.layer_basin.selectAll("path.basinHydro")
             .data(simplifiedGeoJSON_basinHydro.features, d => d.properties.name)
             .join("path")
             .attr("class", "basinHydro")
@@ -1410,7 +1352,7 @@ function update_map(id_svg, svgElement, data_back) {
             )
         };
 
-        elements.layer_secteur.selectAll("path.secteurHydro")
+        element.layer_secteur.selectAll("path.secteurHydro")
             .data(secteursInBasin.features, d => d.properties.name)
             .join("path")
             .attr("class", "secteurHydro")
@@ -1424,7 +1366,7 @@ function update_map(id_svg, svgElement, data_back) {
             .attr("d", pathGenerator);
 
         // Couche France
-        elements.layer_france.selectAll("path.france")
+        element.layer_france.selectAll("path.france")
             .data(simplifiedGeoJSON_france.features)
             .join("path")
             .attr("class", "france")
@@ -1439,78 +1381,39 @@ function update_map(id_svg, svgElement, data_back) {
             .transition()
             .duration(1000);
             
-        if (elements.data_back) {
-            redrawPoint(elements.svgElement, elements.data_back, elements.projectionMap);
+        if (data_back) {
+            redrawPoint(element.svgElement, data_back, element.projectionMap);
             highlight_selected_point();
         }
     }
-
-
-    // Handle window resizing
-    function handleResize() {
-	const elements = mapElements[id_svg];
-	if (!elements) return;
-
-	// Recalculate container dimensions
-	elements.width = elements.container.clientWidth;
-	elements.height = elements.container.clientHeight;
-
-	// Update projection to fit new container
-	elements.projectionMap.fitExtent(
-            [[margin, margin], [elements.width - margin, elements.height - margin]],
-            geoJSONdata_france
-	);
-
-	// Redraw the map
-	redrawMap(id_svg);
-    }
-
-    // Listen for browser resize events
-    window.addEventListener("resize", handleResize);
-
     
+
+    const redrawMapALL_debounce = debounce((id_svg_ALL) => {
+        id_svg_ALL.forEach(mapId => redrawMap(mapId));
+    }, 100);
     
     // Créer ou réutiliser le zoom partagé
     if (!sharedZoom) {
-        const redrawMap_debounce = debounce((mapIds) => {
-            mapIds.forEach(mapId => redrawMap(mapId));
-        }, 100);
-
-        sharedZoom = d3.zoom()
+	sharedZoom = d3.zoom()
             .scaleExtent([minZoom, maxZoom])
             .translateExtent([[-width * maxPan, -height * maxPan], [width * (1 + maxPan), height * (1 + maxPan)]])
             .on("zoom", function (event) {
-                if (isSyncingZoom) return;
-
-                // Logique métier du zoom
-                riverLength = riverLength_max - (event.transform.k - minZoom)/(maxZoom-minZoom)*(riverLength_max-riverLength_min);
-                k_simplify = k_simplify_ref + (event.transform.k - minZoom)/(maxZoom-minZoom)*(1-k_simplify_ref);
-                
-                const mapIds = ["#svg-france-QA", "#svg-france-QJXA", "#svg-france-VCN10"];
-                
-                isSyncingZoom = true;
-                
-                // Appliquer la transformation à toutes les cartes
-                mapIds.forEach(mapId => {
+		riverLength = riverLength_max - (event.transform.k - minZoom)/(maxZoom-minZoom)*(riverLength_max-riverLength_min);
+		k_simplify = k_simplify_ref + (event.transform.k - minZoom)/(maxZoom-minZoom)*(1-k_simplify_ref);
+		
+		// Appliquer la transformation à toutes les cartes
+		id_svg_ALL.forEach(mapId => {
                     const mapRoot = d3.select(mapId);
                     const mapSvgElement = mapRoot.select("g");
-                    const mapData = mapElements[mapId];
-                    
-                    if (!mapSvgElement.empty() && mapData) {
-                        mapSvgElement.attr("transform", event.transform);
-                        mapSvgElement.style("width", mapData.width * event.transform.k + "px");
-                        mapSvgElement.style("height", mapData.height * event.transform.k + "px");
-                        
-                        // Mettre à jour l'état du zoom
-                        mapRoot.property("__zoom", event.transform);
-                    }
-                });
-                
-                isSyncingZoom = false;
-                
-                // Redessiner toutes les cartes
-                redrawMap_debounce(mapIds);
-                highlight_selected_point();
+                    const element = mapElements[mapId];
+		    mapSvgElement.attr("transform", event.transform);
+		    mapSvgElement.style("width", element.width * event.transform.k + "px");
+		    mapSvgElement.style("height", element.height * event.transform.k + "px");
+		    // Mettre à jour l'état du zoom
+		    mapRoot.property("__zoom", event.transform);
+		});
+		
+		redrawMapALL_debounce(id_svg_ALL);
             });
     }
 
@@ -1601,8 +1504,8 @@ function update_map(id_svg, svgElement, data_back) {
     
     // Dessiner la carte initiale
     redrawMap(id_svg);
-    handleResize();
-
+    window.addEventListener("resize", redrawMap(id_svg));
+    
     return svgElement;
 }
 
