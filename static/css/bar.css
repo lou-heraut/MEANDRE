@@ -355,7 +355,6 @@
 	height: 3rem;
     }
     #bar.expanded {
-	/* width: calc(100vw - 18rem - 3px); */
 	width: 0rem;
     }
 
