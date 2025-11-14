@@ -46,7 +46,10 @@
     font-weight: 700;
 }
 
-
+#home p {
+    padding-bottom: 1rem;
+}
+    
 #maintenance {
     display: flex;
     flex-direction: column;
@@ -168,10 +171,13 @@
     }
 
     #home p {
-	padding-bottom: 3rem;
 	padding-left: 2rem;
 	padding-right: 2rem;
     }
+    #home p.last-p {
+	padding-bottom: 3rem;
+    }
+    
     #maintenance {
 	margin-left: 2rem;
 	margin-right: 2rem;
