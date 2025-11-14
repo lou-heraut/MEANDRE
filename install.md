@@ -104,10 +104,9 @@ sudo systemctl start postgresql
 source .env
 sudo -u postgres psql -U postgres -c "CREATE DATABASE \"${DB_NAME}\";"
 
-sudo -u postgres psql -U postgres -c "CREATE USER \"${DB_SUPER_USER}\" WITH PASSWORD '${DB_SUPER_PASSWORD}';"
-sudo -u postgres psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE \"${DB_NAME}\" TO \"${DB_SUPER_USER}\";"
-
+sudo -u postgres psql -U postgres -c "CREATE ROLE \"${DB_SUPER_USER}\" WITH LOGIN PASSWORD '${DB_SUPER_PASSWORD}' SUPERUSER;"
 sudo -u postgres psql -U postgres -c "CREATE USER \"${DB_USER}\" WITH PASSWORD '${DB_PASSWORD}';"
+
 sudo -u postgres psql -U postgres -d $DB_NAME -c "GRANT CONNECT ON DATABASE \"${DB_NAME}\" TO \"${DB_USER}\";"
 sudo -u postgres psql -U postgres -d $DB_NAME -c "GRANT SELECT ON ALL TABLES IN SCHEMA public TO \"${DB_USER}\";"
 sudo -u postgres psql -U postgres -d $DB_NAME -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO \"${DB_USER}\";"
@@ -120,13 +119,6 @@ sudo -u postgres pg_restore -U postgres -d $DB_NAME -v ~/$DB_NAME.backup
 ``` sh
 sudo apt install python3 python3-pip -y
 sudo apt install python3-flask python3-sqlalchemy python3-flask-cors python3-psycopg2 python3-numpy python3-pandas python3-dotenv python3-scipy -y
-```
-
-
-### 5. Install R
-``` sh
-sudo apt install -y r-base
-sudo Rscript -e 'install.packages(c("argparse", "jsonlite", "remotes", "lubridate", "dplyr", "digest", "dotenv", "stringr")); remotes::install_github("super-lou/dataSHEEP")'
 ```
 
 

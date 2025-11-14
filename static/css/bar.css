@@ -26,8 +26,9 @@
     width: 14rem;
     height: 3rem;
     color: #16171f;
-    box-shadow: 0 1px 2px rgba(60,64,67,0.3),0 2px 6px 2px rgba(60,64,67,0.15);
-    z-index: 1;
+    background: #ffffff;
+    box-shadow: 0 6px 10px -4px rgba(60, 64, 67, 0.25);
+    z-index: 2;
 }
 
 .logo {
@@ -84,7 +85,7 @@
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
     -ms-overflow-style: none;
-    box-shadow: 0 1px 2px rgba(60,64,67,0.3),0 2px 6px 2px rgba(60,64,67,0.15);
+    box-shadow: 0 6px 10px -4px rgba(60, 64, 67, 0.25);
     z-index: 1;
 }
 #bar.expanded {
@@ -150,6 +151,21 @@
     margin-right: 0.3rem;
 }
 
+
+
+#tab_MEANDRE {
+    padding-left: 1rem;
+    margin-right: 1.1rem;
+}
+#tab_MEANDRE-text {
+    border: solid 2px #060508;
+    border-radius: 1rem;
+}
+.bar-tab:hover #tab_MEANDRE-text {
+    border: solid 2px #89898a;
+}
+
+
 #button_exploration-avancee {
     position: absolute;
     right: 0;
@@ -157,7 +173,7 @@
     background: #ffffff;
     width: 8rem;
     height: 3rem;
-    box-shadow: 0 1px 2px rgba(60,64,67,0.3),0 2px 6px 2px rgba(60,64,67,0.15);
+    box-shadow: 0 6px 10px -4px rgba(60, 64, 67, 0.25);
     z-index: 1;
 }
 #button_exploration-avancee.expanded {
@@ -194,7 +210,7 @@
     height: 1.5rem;
     border-radius: 50%;
     background-color: #ffffff;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 5px rgba(60, 64, 67, 0.5);
     display: none;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -324,8 +340,10 @@
     }
 
     #logo {
+	border-bottom: 3px solid #EDEDED;
 	position: relative;
 	width: 100vw;
+	box-shadow: none;
     }
     
     #first_sep {
@@ -333,7 +351,7 @@
     }
     
     #bar {
-	width: calc(100vw - 3rem - 6px);
+	width: calc(100vw - 3rem - 3px);
 	height: 3rem;
     }
     #bar.expanded {

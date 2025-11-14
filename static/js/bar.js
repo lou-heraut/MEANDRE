@@ -127,12 +127,12 @@ function check_bar() {
 	arrows.each(function() {
 	    $(this).addClass("show");
 	});
-	sep.style.display = "none";
+	// sep.style.display = "none";
     } else {
 	arrows.each(function() {
 	    $(this).removeClass("show");
 	});
-	sep.style.display = "inline-flex";
+	// sep.style.display = "inline-flex";
     }
 }
 window.addEventListener('resize', function() {

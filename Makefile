@@ -10,3 +10,6 @@ front:
 	python3 -m http.server
 back:
 	. ~/python_env/bin/activate && python3 app.py
+
+shutdown_disk:
+	udisksctl power-off -b /dev/sdd 

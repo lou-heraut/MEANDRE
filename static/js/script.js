@@ -877,7 +877,6 @@ const stroke_entiteHydro = "#000000";
 
 const fill_france = "transparent";
 const stroke_france = "#89898A";
-/* "#3D3E3E"; */
 const fill_basinHydro = "transparent";
 const stroke_basinHydro = "#ACACAD";
 const stroke_river = "#B0D9D6";
@@ -888,14 +887,11 @@ const maxZoom = 4;
 const maxPan = 0;
 const scale = 3.5;
 
-const transitionDuration = 500;
-
 const k_simplify_ref = 0.1;
 let k_simplify = k_simplify_ref;
 
 const riverLength_max = 0.4;
 const riverLength_min = 0;
-// let riverLength = riverLength_max;
 let riverLength;
 
 const strokeWith_france = 2;
@@ -903,8 +899,8 @@ const strokeWith_basinHydro = 1;
 const strokeWith_river_max = 1.5;
 const strokeWith_river_min = 0.4;
 
-let width = window.innerHeight;
-let height = window.innerHeight;
+// let width = window.innerHeight;
+// let height = window.innerHeight;
 
 let projectionMap;
 
