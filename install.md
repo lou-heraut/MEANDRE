@@ -177,7 +177,7 @@ sudo crontab -e
 
 Then add the following line
 ```sh
-00 7 * * * root /usr/bin/Rscript $SERVER_DIR/MEANDRE/access_log/script_hash_access_log.R >> /var/log/script_hash.log 2>&1
+00 7 * * * root /usr/bin/Rscript $SERVER_DIR/MEANDRE/access_log/script_hash_access_log.R >> /var/log/MEANDRE_script_hash.log 2>&1
 ```
 
 
