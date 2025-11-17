@@ -39,7 +39,7 @@ for (path_hash in Paths_hash) {
                                             IPhash=IPhash))
 }
 
-ASHE::write_tibble(access, "access_log.csv")
+write.csv(access, file="access_log.csv", row.names=FALSE)
 
 
 ## PLOT ______________________________________________________________
