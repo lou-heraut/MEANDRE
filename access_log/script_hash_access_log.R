@@ -39,7 +39,8 @@ apply_hash = function (x) {
 
 
 ## CONFIG ____________________________________________________________
-load_dot_env("../.env")
+APP_PATH = "/var/www/MEANDRE"
+dotenv::load_dot_env(file.path(APP_PATH, "/.env"))
 APP_NAME = Sys.getenv("APP_NAME")
 SERVER_NAME = Sys.getenv("SERVER_NAME")
 HASH_SALT = Sys.getenv("HASH_SALT")
@@ -48,14 +49,14 @@ today = Sys.Date()
 Paths_log = list.files("/var/log/apache2/", pattern=paste0(APP_NAME, "_access"), full.names=TRUE)
 # Paths_log = list.files("log", pattern=paste0(APP_NAME, "_access"), full.names=TRUE)
 
-outdir = "hash_access_log"
-if (!dir.exists(outdir)) {
-    dir.create(outdir)
+out_dirpath = file.path(APP_PATH, "access_log", "hash_access_log")
+if (!dir.exists(out_dirpath)) {
+    dir.create(out_dirpath)
 }
 
 
 ## DATA RETENTION ____________________________________________________
-Paths_hash = list.files(outdir, full.names=TRUE)
+Paths_hash = list.files(out_dirpath, full.names=TRUE)
 Date = as.Date(gsub("(.*[_])|([.].*)", "",
                     basename(Paths_hash)))
 
@@ -92,7 +93,7 @@ for (i in 1:nPaths_log) {
     IPhash = sapply(IP, apply_hash, USE.NAMES=FALSE)
 
     if (length(IPhash) > 0) {
-        filepath = file.path(outdir,
+        filepath = file.path(out_dirpath,
                              paste0(APP_NAME, "_access_log_",
                                     date, ".txt"))
         writeLines(IPhash, filepath)
