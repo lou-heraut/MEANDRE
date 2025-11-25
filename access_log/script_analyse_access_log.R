@@ -26,8 +26,9 @@ library(lubridate)
 
 
 ## GET ACCESS DATA ___________________________________________________
-outdir = "hash_access_log"
-Paths_hash = list.files(outdir, full.names=TRUE)
+APP_PATH = "/var/www/MEANDRE"
+out_dirpath = file.path(APP_PATH, "access_log", "hash_access_log")
+Paths_hash = list.files(out_dirpath, full.names=TRUE)
 access = dplyr::tibble()
 
 for (path_hash in Paths_hash) {
@@ -39,13 +40,14 @@ for (path_hash in Paths_hash) {
                                             IPhash=IPhash))
 }
 
-write.csv(access, file="access_log.csv", row.names=FALSE)
+analyse_file_path = file.path(APP_PATH, "access_log", "access_log.csv")
+write.csv(access, file=analyse_file_path, row.names=FALSE)
 
 
 ## PLOT ______________________________________________________________
-figdir = "figures"
-if (!dir.exists(figdir)) {
-    dir.create(figdir)
+figpath = file.path(APP_PATH, "access_log", "figures")
+if (!dir.exists(figpath)) {
+    dir.create(figpath)
 }
 
 dataSHEEP::assign_colors()
@@ -68,7 +70,7 @@ plot = ggplot(access_daily, aes(x=date, y=unique_IP)) +
                        n.breaks=8)
 
 ggsave(plot=plot,
-       path=figdir,
+       path=figpath,
        filename="access_log_daily.pdf",
        width=20, height=10, units='cm',
        dpi=300, device=cairo_pdf)
@@ -93,7 +95,7 @@ plot = ggplot(access_monthly, aes(x = month, y = unique_IP)) +
                        n.breaks=8)
 
 ggsave(plot=plot,
-       path=figdir,
+       path=figpath,
        filename="access_log_monthly.pdf",
        width=20, height=10, units='cm',
        dpi=300, device=cairo_pdf)
@@ -121,10 +123,7 @@ plot = ggplot(access_cumulative, aes(x=date, y=cum_unique_IP)) +
                        n.breaks=8)
 
 ggsave(plot=plot,
-       path=figdir,
+       path=figpath,
        filename="access_log_cumulative.pdf",
        width=20, height=10, units='cm',
        dpi=300, device=cairo_pdf)
-
-
-

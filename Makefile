@@ -13,3 +13,6 @@ back:
 
 shutdown_disk:
 	udisksctl power-off -b /dev/sdd 
+
+get_figures : 
+	scp MEANDRE:/var/www/MEANDRE/access_log/figures/* ./figures/
