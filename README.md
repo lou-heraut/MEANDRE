@@ -1,7 +1,7 @@
 # MEANDRE [<img src="https://github.com/louis-heraut/MEANDRE/blob/3ddb682aa3fa38a18fdd36292dd8aa51e6a9d565/static/resources/logo/MEANDRE_logo.svg" align="right" width=100 height=100 alt=""/>](https://meandre.explore2.inrae.fr/)
 
 <!-- badges: start -->
-[![ASSISTED BY AI](https://raw.githubusercontent.com/louis-heraut/louis-heraut/main/ai-label/ai-label_badge-assisted-by-ai.svg)](https://ai-label.org/)
+[![ASSISTED BY AI](https://raw.githubusercontent.com/louis-heraut/ai-label-badge/main/ai-label_badge-assisted-by-ai.svg)](https://ai-label.org/)
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-green)](https://lifecycle.r-lib.org/articles/stages.html)
 ![](https://img.shields.io/github/last-commit/louis-heraut/MEANDRE)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md) 
