@@ -41,16 +41,21 @@ QUERY = {"exp": "historical_rcp85", "variable": "QA",
 
 
 def fingerprint(data):
-    """Hash of a response, floats rounded to absorb numerical noise."""
-    def rounded(x):
+    """Hash of a response, floats rounded to absorb numerical noise and
+    records sorted, their order not being guaranteed (SQL, pandas sort)."""
+    def normalized(x):
         if isinstance(x, float):
             return float("%.6g" % x)
-        if isinstance(x, list):
-            return [rounded(v) for v in x]
         if isinstance(x, dict):
-            return {k: rounded(v) for k, v in x.items()}
+            return {k: normalized(v) for k, v in x.items()}
+        if isinstance(x, list):
+            x = [normalized(v) for v in x]
+            if x and all(isinstance(v, dict) for v in x):
+                x.sort(key=lambda v: json.dumps(v, sort_keys=True))
+            return x
         return x
-    return hashlib.sha256(json.dumps(rounded(data), sort_keys=True).encode()).hexdigest()[:12]
+    text = json.dumps(normalized(data), sort_keys=True)
+    return hashlib.sha256(text.encode()).hexdigest()[:12]
 
 
 def post(route, query):
