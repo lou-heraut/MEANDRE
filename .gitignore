@@ -11,6 +11,7 @@ results
 figures
 *.Rdata
 __pycache__/
+.python_env/
 *.backup
 *.dump
 access_log/stats/

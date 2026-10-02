@@ -1,0 +1,3 @@
+# Local only, installed by `make venv-dev`: plotly for `make stats-html`
+-r requirements.txt
+plotly==7.1.0
