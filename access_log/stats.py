@@ -336,7 +336,7 @@ def html_report(args):
     """Local HTML report (plotly is only needed here)."""
     import plotly.graph_objects as go
     blue, light_blue, dark_blue = "#2a78d6", "#9ec5f0", "#1b4f8a"
-    orange, grey = "#f28e2b", "#b4aca2"
+    green, grey = "#1baf7a", "#b4aca2"
     body, js = [], "cdn"
     for app in APPS:
         path = csv_path(args, app)
@@ -358,7 +358,7 @@ def html_report(args):
 
         by_month = go.Figure([
             go.Scatter(x=list(months), y=[v["ips"] for v in months.values()],
-                       line_color=orange,
+                       line_color=green,
                        name="ips : toutes les IP, robots compris",
                        hovertemplate="%{y:.1f} ips<extra></extra>"),
             go.Scatter(x=list(months), y=[v["users"] for v in months.values()],
