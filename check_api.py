@@ -23,7 +23,8 @@
 
 """Vérifie l'API de la carte sur la vraie base, sans passer par Apache.
 
-Interroge les deux routes comme le fait la page (mode narratif, QA, H3)
+Interroge les deux routes comme le fait la page (mode narratif avec les
+quatre narratifs, QA, H3)
 et affiche une empreinte des réponses : deux environnements Python qui
 donnent les mêmes empreintes servent exactement les mêmes données.
 """
@@ -34,10 +35,14 @@ import sys
 
 from app import app
 
+# get_delta_serie draws a median curve for each of the four narratives
+NARRATIVES = ["HadGEM2-ES_ALADIN63", "CNRM-CM5_ALADIN63",
+              "EC-EARTH_HadREM3-GA7", "HadGEM2-ES_CCLM4-8-17"]
 HM = ["CTRIP", "EROS", "GRSD", "J2000", "MORDOR-SD",
       "MORDOR-TS", "ORCHIDEE", "SIM2", "SMASH"]
 QUERY = {"exp": "historical_rcp85", "variable": "QA",
-         "chain": ["historical-rcp85_HadGEM2-ES_ALADIN63_ADAMONT_" + hm for hm in HM]}
+         "chain": ["historical-rcp85_%s_ADAMONT_%s" % (narrative, hm)
+                   for narrative in NARRATIVES for hm in HM]}
 
 
 def fingerprint(data):
