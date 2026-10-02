@@ -49,7 +49,7 @@ Développement : Louis Héraut, RiverLy, INRAE, France
 Référent scientifique : Jean-Philippe Vidal, RiverLy, INRAE, France
 Contact : contact.meandre@listes.inrae.fr
 
-Code source : https://github.com/super-lou/MEANDRE
+Code source : https://github.com/lou-heraut/MEANDRE
 Hébergement web : Data Center de INRAE, Île-de-France
 
 
