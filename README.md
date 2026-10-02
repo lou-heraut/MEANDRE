@@ -43,8 +43,12 @@ If you want to try by yourself, why not start by also [opening an issue](https:/
 If we’re connected through work, why not reach out via email to see if we can collaborate more closely on this repo by adding you as a collaborator !
 
 
+## Lancer le projet
+Toutes les commandes passent par le Makefile, depuis le dossier du code : `make help` les liste. En local, `make venv-dev` crée l'environnement Python `.python_env` (versions figées dans `requirements.txt`), puis `make run` lance l'appli sur http://127.0.0.1:5000, avec la base PostgreSQL décrite dans `.env` (voir `.env.example`). L'installation et la mise à jour du serveur sont décrites dans [INSTALL.md](INSTALL.md).
+
+
 ## Statistiques d'accès
-Le script `access_log/stats.py` calcule des statistiques journalières de MEANDRE et MEANDRE-TRACC à partir des logs Apache. Les IP ne sont traitées qu'en mémoire : seuls des comptes par jour sont écrits dans `access_log/stats/<app>_daily.csv`. Toutes les commandes se lancent depuis le dossier du code (`make help`), l'installation est décrite dans [INSTALL.md](INSTALL.md).
+Le script `access_log/stats.py` calcule des statistiques journalières de MEANDRE et MEANDRE-TRACC à partir des logs Apache. Les IP ne sont traitées qu'en mémoire : seuls des comptes par jour sont écrits dans `access_log/stats/meandre_daily.csv` et `meandre-tracc_daily.csv`. Toutes les commandes se lancent depuis le dossier du code (`make help`), l'installation est décrite dans [INSTALL.md](INSTALL.md).
 
 | Cible | Où | Effet |
 |---|---|---|
@@ -52,7 +56,7 @@ Le script `access_log/stats.py` calcule des statistiques journalières de MEANDR
 | `make stats` | serveur ou local | rapport terminal : résumé, moyennes mensuelles users vs ips, users par jour sur 90 jours, arrêts |
 | `make stats-live` | serveur (sudo) | chiffres du jour en cours, rafraîchis chaque minute |
 | `make stats-get` | local | rapatrie les CSV du serveur |
-| `make stats-html` | local | même contenu en HTML interactif, `access_log/stats/report.html` (nécessite `make venv-dev`) |
+| `make stats-html` | local | même contenu en HTML interactif, `access_log/stats/meandre-report.html` (nécessite `make venv-dev`) |
 | `make test` | local | vérifie le script sur des logs synthétiques |
 
 Métriques, par jour :
@@ -63,7 +67,7 @@ Métriques, par jour :
 
 `users` est la métrique principale. Ces appels ne partent que si le JavaScript de la page s'exécute et que quelqu'un utilise la carte : robots d'indexation, scanners et aperçus de liens n'en font quasiment jamais. `ips` suit au contraire l'activité des robots : entre octobre et décembre 2025, elle est passée de 163 à 68 IP par jour sans que l'usage réel change, simplement parce que des robots ont cessé de passer.
 
-Une IP n'est pas exactement une personne (réseau partagé, IP mobile qui change), et le « total users » mensuel est une somme de comptes journaliers : une personne venue trois jours compte trois fois. Le jour en cours est partiel : il est signalé et exclu des moyennes.
+Une IP n'est pas exactement une personne (réseau partagé, IP mobile qui change). Le jour en cours est partiel : il est signalé et exclu des moyennes. Les jours sans aucun log (arrêt du serveur) sont signalés à part, en gris dans les rapports.
 
 
 ## Code of Conduct

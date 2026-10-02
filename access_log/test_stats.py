@@ -24,7 +24,7 @@
 
 """Tests of stats.py on synthetic logs (IPs from 192.0.2.0/24).
 
-Run with: make stats-test
+Run with: make test
 """
 
 import contextlib
@@ -111,7 +111,7 @@ class TestStats(unittest.TestCase):
             opener = gzip.open if name.endswith(".gz") else open
             with opener(os.path.join(self.logs, name), "wt") as f:
                 f.writelines(lines)
-        with open(os.path.join(self.out, "MEANDRE_daily.csv"), "w") as f:
+        with open(os.path.join(self.out, "meandre_daily.csv"), "w") as f:
             f.write(OLD_CSV)
 
     def run_stats(self, command):
@@ -121,7 +121,7 @@ class TestStats(unittest.TestCase):
         return out.getvalue()
 
     def csv(self, app):
-        return stats.read_csv(os.path.join(self.out, app + "_daily.csv"))
+        return stats.read_csv(os.path.join(self.out, app.lower() + "_daily.csv"))
 
     def test_parse(self):
         paths = stats.log_files(self.logs, "MEANDRE_access.log")
@@ -146,7 +146,7 @@ class TestStats(unittest.TestCase):
         self.assertEqual(self.csv("MEANDRE-TRACC"), {D[1]: row(6, 6, 3, 2)})
         self.assertIn("1 lignes mal formées", output)
         self.assertIn("%s → %s (24 j), %s" % (D[29], D[6], D[3]), output)
-        with open(os.path.join(self.out, "MEANDRE_daily.csv")) as f:
+        with open(os.path.join(self.out, "meandre_daily.csv")) as f:
             self.assertEqual(f.readline(), "date,requests,ips,users,bot_requests\n")
         # Idempotent
         before = self.csv("MEANDRE")
@@ -154,14 +154,14 @@ class TestStats(unittest.TestCase):
         self.assertEqual(self.csv("MEANDRE"), before)
 
     def test_oldest_day_overwritten_when_more_complete(self):
-        with open(os.path.join(self.out, "MEANDRE_daily.csv"), "w") as f:
+        with open(os.path.join(self.out, "meandre_daily.csv"), "w") as f:
             f.write("date,requests,ips,users,bot_requests\n%s,1,1,0,0\n" % D[5])
         self.run_stats("update")
         self.assertEqual(self.csv("MEANDRE")[D[5]], row(2, 2, 0, 0))
 
     def test_partial_day_from_last_update(self):
         self.run_stats("update")
-        path = os.path.join(self.out, "MEANDRE_daily.csv")
+        path = os.path.join(self.out, "meandre_daily.csv")
         rows = stats.read_csv(path)
         self.assertEqual(max(stats.finished(path, rows)), D[1])
         # CSV updated yesterday, read today: its last day is still partial
@@ -200,7 +200,7 @@ class TestStats(unittest.TestCase):
             self.skipTest("plotly absent")
         self.run_stats("update")
         self.run_stats("html")
-        with open(os.path.join(self.out, "report.html")) as f:
+        with open(os.path.join(self.out, "meandre-report.html")) as f:
             html = f.read()
         self.assertIn("cdn.plot.ly", html)
         self.assertNotIn("192.0.2.", html)

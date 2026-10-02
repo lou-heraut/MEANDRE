@@ -24,10 +24,10 @@
 
 """Statistiques d'accès de MEANDRE et MEANDRE-TRACC (logs Apache).
 
-  update  [prod, root]  met à jour stats/<app>_daily.csv depuis tous les logs
+  update  [prod, root]  met à jour stats/<appli>_daily.csv depuis tous les logs
   ascii   [prod/local]  rapport terminal à partir des CSV
   today   [prod, root]  chiffres du jour en cours (fichier de log courant)
-  html    [local]       stats/report.html avec plotly
+  html    [local]       stats/meandre-report.html avec plotly
 
 Les IP ne vivent qu'en mémoire : seuls des comptes journaliers sont écrits.
 """
@@ -114,7 +114,7 @@ def parse(paths, api, only_day=None):
 
 ## CSV _______________________________________________________________
 def csv_path(args, app):
-    return os.path.join(args.stats_dir, app + "_daily.csv")
+    return os.path.join(args.stats_dir, app.lower() + "_daily.csv")
 
 def read_csv(path):
     if not os.path.exists(path):
@@ -403,7 +403,7 @@ def html_report(args):
             body.append(fig.to_html(full_html=False, include_plotlyjs=js,
                                     config={"displayModeBar": False}))
             js = False
-    path = os.path.join(args.stats_dir, "report.html")
+    path = os.path.join(args.stats_dir, "meandre-report.html")
     with open(path, "w", encoding="utf-8") as f:
         f.write(PAGE % (date.today(), "\n".join(body)))
     print(path)

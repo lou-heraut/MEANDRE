@@ -149,5 +149,5 @@ stats-get:  ## rapatrie les CSV du serveur (local)
 	mkdir -p access_log/stats
 	scp -p '$(SERVER):$(SERVER_DIR)/access_log/stats/*_daily.csv' access_log/stats/
 
-stats-html:  ## génère access_log/stats/report.html (local, make venv-dev)
+stats-html:  ## génère access_log/stats/meandre-report.html (local, make venv-dev)
 	$(PYTHON) access_log/stats.py html

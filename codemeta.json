@@ -41,7 +41,7 @@
             "roleName": "Management"
         }
     ],
-    "codeRepository": "https://github.com/super-lou/MEANDRE/",
+    "codeRepository": "https://github.com/lou-heraut/MEANDRE/",
     "dateCreated": "2024-05-30",
     "datePublished": "2024-06-27",
     "description": "MEANDRE https://meandre.explore2.inrae.fr/ présente de manière guidée un regard d'expert sur les résultats des projections hydrologiques réalisées sur la France. La mise à jour de ces projections a été réalisé entre 2022 et 2024 dans le cadre du projet national Explore2. \nCes résultats sont un aperçu de quelques futurs possibles pour la ressource en eau.\n\nMEANDRE https://meandre.explore2.inrae.fr/ provides a guided expert perspective on the results of hydrological projections conducted for France. These projections were updated between 2022 and 2024 as part of the national Explore2 project. \nThe results offer a glimpse into some possible futures for water resources.",
