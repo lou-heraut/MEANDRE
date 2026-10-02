@@ -320,6 +320,7 @@ PAGE = """<!doctype html><html lang="fr"><head><meta charset="utf-8">
 <title>Statistiques d'accès</title>
 <style>body{font-family:system-ui,sans-serif;max-width:1000px;margin:2em auto;padding:0 16px;
 color:#222;background:#fff}h2{margin-top:2em}p{color:#555}
+hr{border:0;border-top:1px solid #d5d9e0;margin:3em 0 0}
 .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
 .tile{background:#f4f6f9;border-radius:8px;padding:12px 16px}
 .tile b{display:block;font-size:1.6em;font-weight:600}.tile span{color:#555;font-size:.9em}
@@ -350,6 +351,8 @@ def html_report(args):
                   "users par jour en semaine / le week-end"),
                  (fmt(s["ips"]), "ips par jour sur 30 jours"),
                  (len(s["missing"]), "jours d'arrêt sur %d jours de logs" % len(rows))]
+        if body:  # a line between apps
+            body.append("<hr>")
         body.append("<h2>%s</h2><div class=tiles>%s</div>"
                     % (app, "".join(TILE % t for t in tiles)))
 
