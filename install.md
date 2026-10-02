@@ -54,7 +54,7 @@ cp MEANDRE/Makefile ~/
 
 Copy the env file from the default one and secure it
 ``` sh
-cp MEANDRE/install.env MEANDRE/.env
+cp MEANDRE/.env.example MEANDRE/.env
 ```
 Edit this env file with your info.\\
 **WARNING : KEEP THE .ENV FILE FOR YOU. DO NOT EXPOSE IT.**
@@ -164,20 +164,42 @@ sudo certbot --apache
 ```
 
 
-## 7. Configure Log Statistics
-Create a directory for storing log information
+## 7. Configure Access Statistics
+Daily statistics of MEANDRE and MEANDRE-TRACC are computed by `access_log/stats.py` from the Apache logs. IP addresses are only processed in memory: only daily counts are written to `access_log/stats/<app>_daily.csv`. The commands below assume the repository is in `/var/www/MEANDRE` (variable `MEANDRE_DIR` of the Makefile).
+
+Update the repository and the copy of the Makefile in your home directory
 ```sh
-sudo mkdir -p /var/www/MEANDRE/access_log/hash_access_log
+cd /var/www/MEANDRE && git pull
+cp /var/www/MEANDRE/Makefile ~/
 ```
 
-Add a cron job
+Compute the statistics a first time (all the available logs are read, about one year) and check the report
+```sh
+cd ~
+make stats-update
+make stats
+```
+
+Add a daily cron job for root
 ```sh
 sudo crontab -e
 ```
 
-Then add the following line
+Then add the following line (root crontab, hence no user field)
 ```sh
-00 7 * * * root /usr/bin/Rscript $SERVER_DIR/MEANDRE/access_log/script_hash_access_log.R >> /var/log/MEANDRE_script_hash.log 2>&1
+30 0 * * * /usr/bin/python3 /var/www/MEANDRE/access_log/stats.py update >> /var/log/MEANDRE_stats.log 2>&1
+```
+Remove the former R job calling `script_hash_access_log.R` if it is still there: look in `sudo crontab -l`, `/etc/crontab` and `/etc/cron.d/`.
+
+Follow the current day in near real time (refreshed every minute, `Ctrl+C` to quit)
+```sh
+make stats-live
+```
+
+Once the new statistics are validated, remove the files of the former system (they contain hashed IP addresses)
+```sh
+sudo rm -r /var/www/MEANDRE/access_log/hash_access_log /var/www/MEANDRE/access_log/figures
+sudo rm /var/www/MEANDRE/access_log/access_log.csv
 ```
 
 

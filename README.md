@@ -43,5 +43,30 @@ If you want to try by yourself, why not start by also [opening an issue](https:/
 If we’re connected through work, why not reach out via email to see if we can collaborate more closely on this repo by adding you as a collaborator !
 
 
+## Statistiques d'accès
+Le script `access_log/stats.py` calcule des statistiques journalières de MEANDRE et MEANDRE-TRACC à partir des logs Apache. Les IP ne sont traitées qu'en mémoire : seuls des comptes par jour sont écrits dans `access_log/stats/<app>_daily.csv`. Le déploiement est décrit dans [install.md](install.md).
+
+| Cible | Où | Effet |
+|---|---|---|
+| `make stats-update` | prod (sudo) | relit tous les logs disponibles et met à jour les CSV, lancé chaque nuit par cron |
+| `make stats` | prod | rapport terminal : 30 derniers jours, moyennes mensuelles, tendance sur 90 jours, jours manquants |
+| `make stats-live` | prod (sudo) | chiffres du jour en cours, rafraîchis chaque minute |
+| `make get_analyse` | local | rapatrie les CSV de la prod |
+| `make stats-html` | local | génère `access_log/stats/report.html` (nécessite plotly) |
+| `make stats-test` | local | vérifie le script sur des logs synthétiques |
+
+En local, le rapport terminal s'obtient avec `python3 access_log/stats.py ascii`.
+
+Métriques, par jour :
+- `users` : IP distinctes ayant appelé l'API de la carte (POST vers `/get_delta_on_horizon` ou `/get_delta_serie` pour MEANDRE, vers `/get_narrative_data`, `/get_narrative` ou `/define_data_palette` pour MEANDRE-TRACC) ;
+- `ips` : toutes les IP distinctes, robots compris ;
+- `requests` : nombre de requêtes ;
+- `bot_requests` : requêtes dont le user agent se déclare robot ou outil (bot, crawl, spider, curl, python…).
+
+`users` est la métrique principale. Ces appels ne partent que si le JavaScript de la page s'exécute et que quelqu'un utilise la carte : robots d'indexation, scanners et aperçus de liens n'en font quasiment jamais. `ips` suit au contraire l'activité des robots : entre octobre et décembre 2025, elle est passée de 163 à 68 IP par jour sans que l'usage réel change, simplement parce que des robots ont cessé de passer.
+
+Une IP n'est pas exactement une personne (réseau partagé, IP mobile qui change), et le « total users » mensuel est une somme de comptes journaliers : une personne venue trois jours compte trois fois. Le jour en cours est partiel : il est signalé et exclu des moyennes.
+
+
 ## Code of Conduct
 Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
