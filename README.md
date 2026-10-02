@@ -49,10 +49,10 @@ Le script `access_log/stats.py` calcule des statistiques journalières de MEANDR
 | Cible | Où | Effet |
 |---|---|---|
 | `make stats-update` | serveur (sudo) | relit tous les logs disponibles et met à jour les CSV, lancé chaque nuit par cron (`make cron`) |
-| `make stats` | serveur ou local | rapport terminal : 30 derniers jours, moyennes mensuelles, tendance sur 90 jours, jours manquants |
+| `make stats` | serveur ou local | rapport terminal : résumé, moyennes mensuelles users vs ips, users par jour sur 90 jours, arrêts |
 | `make stats-live` | serveur (sudo) | chiffres du jour en cours, rafraîchis chaque minute |
 | `make stats-get` | local | rapatrie les CSV du serveur |
-| `make stats-html` | local | génère `access_log/stats/report.html` (nécessite `make venv-dev`) |
+| `make stats-html` | local | même contenu en HTML interactif, `access_log/stats/report.html` (nécessite `make venv-dev`) |
 | `make test` | local | vérifie le script sur des logs synthétiques |
 
 Métriques, par jour :

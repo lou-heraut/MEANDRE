@@ -180,10 +180,11 @@ class TestStats(unittest.TestCase):
         self.run_stats("update")
         output = self.run_stats("ascii")
         self.assertTrue(all(len(l) <= 100 for l in output.splitlines()))
-        self.assertIn("partiel", output)
-        self.assertIn("%s  %-4s  manquant" % (D[3], stats.WEEKDAYS[D[3].weekday()]),
-                      output)
-        self.assertIn("%s → %s (24 j)" % (D[29], D[6]), output)
+        self.assertIn("25 jours d'arrêt", output)
+        self.assertIn("%s (partiel)" % T, output)
+        self.assertIn("arrêts : %s → %s (24 j), %s" % (D[29], D[6], D[3]), output)
+        self.assertIn("(o users, x ips)", output)
+        self.assertIn("░", output.split("(█ semaine, ▒ week-end, ░ arrêt)")[1])
 
     def test_today(self):
         output = self.run_stats("today")
