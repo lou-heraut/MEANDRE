@@ -12,12 +12,15 @@ PACKAGES = apache2 libapache2-mod-wsgi-py3 python3-certbot-apache \
 	python3-numpy python3-pandas python3-dotenv python3-scipy
 
 WSGI_INIT = wsgi_init_$(shell echo $(APP) | tr 'A-Z-' 'a-z_')
-LOAD_ENV = test -f .env || { echo "pas de .env : make env"; exit 1; }; . ./.env
+CHECK_ENV = test -f .env || { echo "pas de .env : make env"; exit 1; }
+# Value of a .env key (KEY=value, quotes optional): .env is read, never run
+dotenv = $$(sed -n 's/^$(1)=//p' .env | sed "s/^[\"']\(.*\)[\"']$$/\1/")
 define STATUS
-$(LOAD_ENV)
+$(CHECK_ENV)
+server=$(call dotenv,SERVER_NAME)
 git log -1 --format="commit  %h %s (%cr)"
 echo "apache  $$(systemctl is-active apache2)"
-echo "site    $$(curl -s -o /dev/null -w '%{http_code}' https://$$SERVER_NAME/)"
+echo "site    $$(curl -s -o /dev/null -w '%{http_code}' https://$$server/)"
 endef
 
 .ONESHELL:
@@ -37,9 +40,10 @@ test:  ## teste les statistiques sur des logs synthétiques
 	$(PYTHON) -m unittest discover -s access_log -p test_stats.py -v
 
 db-dump:  ## exporte la base locale dans <DB_NAME>.backup, à copier sur le serveur
-	@$(LOAD_ENV)
-	sudo -u postgres pg_dump -Fc -d "$$DB_NAME" > "$$DB_NAME.backup"
-	echo "$$DB_NAME.backup créé"
+	@$(CHECK_ENV)
+	db=$(call dotenv,DB_NAME)
+	sudo -u postgres pg_dump -Fc -d "$$db" > "$$db.backup"
+	echo "$$db.backup créé"
 
 
 ## Installation du serveur (une fois, dans le dossier cloné)
@@ -58,20 +62,22 @@ env:  ## crée .env depuis .env.example, mot de passe de la base généré
 
 db:  ## crée la base et son utilisateur en lecture seule : make db dump=FICHIER
 	@test -n "$(dump)" || { echo "usage : make db dump=FICHIER"; exit 1; }
-	$(LOAD_ENV)
-	sudo -u postgres createdb "$$DB_NAME"
-	sudo -u postgres pg_restore --no-owner -d "$$DB_NAME" < "$(dump)"
-	sudo -u postgres psql -d "$$DB_NAME" -c "CREATE USER \"$$DB_USER\" WITH PASSWORD '$$DB_PASSWORD'; \
-		GRANT CONNECT ON DATABASE \"$$DB_NAME\" TO \"$$DB_USER\"; \
-		GRANT SELECT ON ALL TABLES IN SCHEMA public TO \"$$DB_USER\";"
+	$(CHECK_ENV)
+	db=$(call dotenv,DB_NAME); user=$(call dotenv,DB_USER); password=$(call dotenv,DB_PASSWORD)
+	sudo -u postgres createdb "$$db"
+	sudo -u postgres pg_restore --no-owner -d "$$db" < "$(dump)"
+	sudo -u postgres psql -d "$$db" -c "CREATE USER \"$$user\" WITH PASSWORD '$$password'; \
+		GRANT CONNECT ON DATABASE \"$$db\" TO \"$$user\"; \
+		GRANT SELECT ON ALL TABLES IN SCHEMA public TO \"$$user\";"
 
 apache:  ## génère et active le vhost Apache (SERVER_NAME lu dans .env)
-	@$(LOAD_ENV)
+	@$(CHECK_ENV)
+	server=$(call dotenv,SERVER_NAME)
 	conf=/etc/apache2/sites-available/$(APP).conf
 	test ! -f $$conf || { echo "$$conf existe déjà, rien n'est modifié"; exit 1; }
 	printf '%s\n' \
 		"<VirtualHost *:80>" \
-		"    ServerName $$SERVER_NAME" \
+		"    ServerName $$server" \
 		"" \
 		"    <IfDefine !$(WSGI_INIT)>" \
 		"        WSGIDaemonProcess $(APP) processes=4 threads=5 python-path=/usr/lib/python3/dist-packages" \
@@ -94,11 +100,11 @@ apache:  ## génère et active le vhost Apache (SERVER_NAME lu dans .env)
 	sudo a2ensite -q $(APP)
 	sudo apachectl configtest
 	sudo systemctl reload apache2
-	echo "vhost actif : http://$$SERVER_NAME/ (HTTPS : make https)"
+	echo "vhost actif : http://$$server/ (HTTPS : make https)"
 
 https:  ## active HTTPS avec certbot pour SERVER_NAME
-	@$(LOAD_ENV)
-	sudo certbot --apache -d "$$SERVER_NAME"
+	@$(CHECK_ENV)
+	sudo certbot --apache -d "$(call dotenv,SERVER_NAME)"
 
 cron:  ## installe la mise à jour quotidienne des statistiques (00h30)
 	echo "30 0 * * * root /usr/bin/python3 $(CURDIR)/access_log/stats.py update >> /var/log/$(APP)_stats.log 2>&1" \
