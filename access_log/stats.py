@@ -335,7 +335,7 @@ def html_report(args):
     """Local HTML report (plotly is only needed here)."""
     import plotly.graph_objects as go
     blue, light_blue, dark_blue = "#2a78d6", "#9ec5f0", "#1b4f8a"
-    peach, grey = "#f4a582", "#b4aca2"
+    orange, grey = "#f28e2b", "#b4aca2"
     body, js = [], "cdn"
     for app in APPS:
         path = csv_path(args, app)
@@ -346,24 +346,20 @@ def html_report(args):
         s, months, days = summary(rows, full), monthly(full), sorted(full)
         tiles = [(fmt(s["users"]), "users par jour sur 30 jours, %s vs les 30 jours d'avant"
                   % s["trend"]),
-                 ("%s · %s" % (fmt(s["week"]), fmt(s["weekend"])),
-                  "users par jour en semaine · le week-end"),
+                 ("%s / %s" % (fmt(s["week"]), fmt(s["weekend"])),
+                  "users par jour en semaine / le week-end"),
                  (fmt(s["ips"]), "ips par jour sur 30 jours"),
                  (len(s["missing"]), "jours d'arrêt sur %d jours de logs" % len(rows))]
         body.append("<h2>%s</h2><div class=tiles>%s</div>"
                     % (app, "".join(TILE % t for t in tiles)))
 
-        # open markers: months with missing days (start or end of the logs, stops)
-        month_days = lambda m: (date(m.year + m.month // 12, m.month % 12 + 1, 1) - m).days
-        symbols = ["circle-open" if v["days"] < month_days(m) else "circle"
-                   for m, v in months.items()]
         by_month = go.Figure([
             go.Scatter(x=list(months), y=[v["ips"] for v in months.values()],
-                       line_color=peach, marker_symbol=symbols,
+                       line_color=orange,
                        name="ips : toutes les IP, robots compris",
                        hovertemplate="%{y:.1f} ips<extra></extra>"),
             go.Scatter(x=list(months), y=[v["users"] for v in months.values()],
-                       line_color=blue, marker_symbol=symbols,
+                       line_color=blue,
                        name="users : IP ayant utilisé la carte",
                        customdata=[v["days"] for v in months.values()],
                        hovertemplate="%{y:.1f} users (%{customdata} jours)<extra></extra>")])
