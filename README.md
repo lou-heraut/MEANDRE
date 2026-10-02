@@ -44,18 +44,16 @@ If we’re connected through work, why not reach out via email to see if we can 
 
 
 ## Statistiques d'accès
-Le script `access_log/stats.py` calcule des statistiques journalières de MEANDRE et MEANDRE-TRACC à partir des logs Apache. Les IP ne sont traitées qu'en mémoire : seuls des comptes par jour sont écrits dans `access_log/stats/<app>_daily.csv`. Le déploiement est décrit dans [install.md](install.md).
+Le script `access_log/stats.py` calcule des statistiques journalières de MEANDRE et MEANDRE-TRACC à partir des logs Apache. Les IP ne sont traitées qu'en mémoire : seuls des comptes par jour sont écrits dans `access_log/stats/<app>_daily.csv`. Toutes les commandes se lancent depuis le dossier du code (`make help`), l'installation est décrite dans [INSTALL.md](INSTALL.md).
 
 | Cible | Où | Effet |
 |---|---|---|
-| `make stats-update` | prod (sudo) | relit tous les logs disponibles et met à jour les CSV, lancé chaque nuit par cron |
-| `make stats` | prod | rapport terminal : 30 derniers jours, moyennes mensuelles, tendance sur 90 jours, jours manquants |
-| `make stats-live` | prod (sudo) | chiffres du jour en cours, rafraîchis chaque minute |
-| `make get_analyse` | local | rapatrie les CSV de la prod |
+| `make stats-update` | serveur (sudo) | relit tous les logs disponibles et met à jour les CSV, lancé chaque nuit par cron (`make cron`) |
+| `make stats` | serveur ou local | rapport terminal : 30 derniers jours, moyennes mensuelles, tendance sur 90 jours, jours manquants |
+| `make stats-live` | serveur (sudo) | chiffres du jour en cours, rafraîchis chaque minute |
+| `make stats-get` | local | rapatrie les CSV du serveur |
 | `make stats-html` | local | génère `access_log/stats/report.html` (nécessite plotly) |
-| `make stats-test` | local | vérifie le script sur des logs synthétiques |
-
-En local, le rapport terminal s'obtient avec `python3 access_log/stats.py ascii`.
+| `make test` | local | vérifie le script sur des logs synthétiques |
 
 Métriques, par jour :
 - `users` : IP distinctes ayant appelé l'API de la carte (POST vers `/get_delta_on_horizon` ou `/get_delta_serie` pour MEANDRE, vers `/get_narrative_data`, `/get_narrative` ou `/define_data_palette` pour MEANDRE-TRACC) ;

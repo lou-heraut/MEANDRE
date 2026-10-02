@@ -21,7 +21,8 @@
 // If not, see <https://www.gnu.org/licenses/>.
 
 
-const is_production = false;
+// Local development runs on localhost, anything else is the production
+const is_production = !["localhost", "127.0.0.1"].includes(window.location.hostname);
 let api_base_url;
 let default_n;
 

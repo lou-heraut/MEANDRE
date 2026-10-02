@@ -4,9 +4,11 @@ import logging
 import os
 from dotenv import load_dotenv
 
-load_dotenv(os.path.join("/var/www/MEANDRE/.env"))
+# The app lives next to this file, wherever the repository is cloned
+APP_DIR = os.path.dirname(os.path.abspath(__file__))
+load_dotenv(os.path.join(APP_DIR, ".env"))
 
 logging.basicConfig(stream=sys.stderr)
-sys.path.insert(0, os.path.join(os.environ.get('SERVER_DIR'), "MEANDRE"))
+sys.path.insert(0, APP_DIR)
 
 from app import app as application
